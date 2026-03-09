@@ -10,14 +10,14 @@
       <router-link @click="closeMenu" to="/" class="text-navbar"
         >Inicio</router-link
       >
-      <router-link @click="closeMenu" to="/About-item" class="text-navbar"
-        >Nosotros</router-link
-      >
       <router-link @click="closeMenu" to="/Services-item" class="text-navbar"
         >Cupones</router-link
       >
+      <router-link @click="closeMenu" to="/About-item" class="text-navbar"
+        >Nosotros</router-link
+      >
       <router-link @click="closeMenu" to="/Contact-item" class="text-navbar"
-        >Contacto</router-link
+        >Ayuda</router-link
       >
     </div>
     <div class="hamburger" @click="toggleMenu">☰</div>
@@ -124,7 +124,7 @@ html {
     left: 0;
     width: 100%;
     flex-direction: column;
-    background: linear-gradient(180deg, #325bcd, #325bcd);
+    background: linear-gradient(180deg, #325bcd, #2549ad);
     padding: 25px 0;
     gap: 20px;
     display: none;
