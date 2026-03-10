@@ -4,12 +4,12 @@ import { useRoute } from 'vue-router';
 
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
-import services from '@/data/services.js';
+import coupons from '@/data/coupon.js';
 
 const route = useRoute();
 
-const service = computed(() =>
-  services.find((s) => s.id === Number(route.params.id)),
+const coupon = computed(() =>
+  coupons.find((s) => s.id === Number(route.params.id)),
 );
 
 // Busca el “scroll container” real (si existiera)
@@ -70,28 +70,28 @@ watch(
   </header>
 
   <main class="container">
-    <div v-if="service" class="service-wrapper">
-      <router-link to="/Services-item" class="return-area">
+    <div v-if="coupon" class="coupon-wrapper">
+      <router-link to="/coupons-item" class="return-area">
         <button class="card-button">Regresar</button>
       </router-link>
 
       <h1 class="title">
-        {{ service.name }}
+        {{ coupon.name }}
       </h1>
 
       <img
-        v-if="service.image"
-        class="service-image-details"
-        :src="service.image"
-        :alt="service.name"
+        v-if="coupon.image"
+        class="coupon-image-details"
+        :src="coupon.image"
+        :alt="coupon.name"
       />
 
-      <div class="text-service-type">
-        {{ service.longDescription }}
+      <div class="text-coupon-type">
+        {{ coupon.longDescription }}
       </div>
 
-      <div v-if="service.video1" class="video-container">
-        <iframe :src="service.video1" frameborder="0" allowfullscreen></iframe>
+      <div v-if="coupon.video1" class="video-container">
+        <iframe :src="coupon.video1" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
 
@@ -112,7 +112,7 @@ watch(
   font-family: Outfit, Inter, Avenir, Helvetica, Arial, sans-serif;
 }
 
-.service-wrapper {
+.coupon-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -144,7 +144,7 @@ watch(
   border-radius: 6px;
 }
 
-.service-image-details {
+.coupon-image-details {
   width: 100%;
   height: 420px;
   object-fit: cover;
@@ -153,7 +153,7 @@ watch(
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-.text-service-type {
+.text-coupon-type {
   max-width: 800px;
   font-size: 1.1rem;
   line-height: 1.8;

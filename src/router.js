@@ -2,16 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import Home from './views/Home-item.vue';
 import About from './views/About-item.vue';
-import Services from './views/Services-item.vue';
+import Coupons from './views/Coupon-item.vue';
 import Contact from './views/Contact-item.vue';
-import ServiceDetails from './components/Component-services-item.vue';
+import CouponsDetails from './components/Component-coupons-item.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/About-item', name: 'About', component: About },
-  { path: '/Services-item', name: 'Services', component: Services },
+  { path: '/Coupon-item', name: 'Coupon', component: Coupons },
   { path: '/Contact-item', name: 'Contact', component: Contact },
-  { path: '/service/:id', name: 'ServiceDetails', component: ServiceDetails }, // ✅ Ruta correcta
+  { path: '/coupon/:id', name: 'CouponsDetails', component: CouponsDetails }, // ✅ Ruta correcta
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ];
 

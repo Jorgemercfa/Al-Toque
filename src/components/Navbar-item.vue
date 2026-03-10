@@ -10,7 +10,7 @@
       <router-link @click="closeMenu" to="/" class="text-navbar"
         >Inicio</router-link
       >
-      <router-link @click="closeMenu" to="/Services-item" class="text-navbar"
+      <router-link @click="closeMenu" to="/Coupon-item" class="text-navbar"
         >Cupones</router-link
       >
       <router-link @click="closeMenu" to="/About-item" class="text-navbar"

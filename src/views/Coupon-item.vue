@@ -1,8 +1,8 @@
-<script setup name=src/components/ServicesList.vue>
+<script setup name=src/components/couponsList.vue>
 import navbar from '@/components/Navbar-item.vue'
 import Footer from '@/components/Footer-item.vue'
 import { useRouter } from 'vue-router'
-import services from '@/data/services.js'
+import coupons from '@/data/coupon.js'
 
 const router = useRouter()
 </script>
@@ -11,22 +11,20 @@ const router = useRouter()
   <header>
     <navbar />
   </header>
-  <div class="services-area">
-    <h1 class="title-services">Nuestros servicios</h1>
-    <div class="services-container">
-      <div v-for="service in services" :key="service.id" class="service-card">
-        <div class="service-content">
-          <img v-if="service.image" :src="service.image" :alt="service.name" class="service-image" />
-          <div class="service-info">
-            <h2 class="service-title">{{ service.name }}</h2>
-            <p class="service-description">{{ service.shortDescription }}</p>
-          </div>
+  <div class="coupons-area">
+    <h1 class="title-coupons">Nuestros Cupones</h1>
+    <div class="coupons-container">
+      <div v-for="coupon in coupons" :key="coupon.id" class="coupon-card">
+        <div class="coupon-content">
+        <h2 class="coupon-title">{{ coupon.name }}</h2>
+          <img v-if="coupon.image" :src="coupon.image" :alt="coupon.name" class="coupon-image" />
+          <p class="coupon-description">{{ coupon.shortDescription }}</p>
         </div>
         <button
   class="details-button"
-  @click="router.push({ name: 'ServiceDetails', params: { id: service.id } })"
+  @click="router.push({ name: 'CouponsDetails', params: { id: coupon.id } })"
 >
-  {{ service.details_button }}
+  {{ coupon.details_button }}
 </button>
       </div>
     </div>
@@ -37,12 +35,12 @@ const router = useRouter()
 </template>
 
 <style>
-.services-area {
+.coupons-area {
   margin: 50px 7%;
   text-align: center;
 }
 
-.title-services {
+.title-coupons {
   font-size: 2rem;
   color: #333;
   margin-bottom: 30px;
@@ -51,7 +49,7 @@ const router = useRouter()
   position: relative;
 }
 
-.title-services::after {
+.title-coupons::after {
   content: "";
   width: 60px;
   height: 4px;
@@ -62,59 +60,56 @@ const router = useRouter()
   border-radius: 5px;
 }
 
-.services-container {
+.coupons-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
 }
 
-.service-card {
+.coupon-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   background: linear-gradient(135deg, #325BCD, #2549ad);
   color: white;
   border-radius: 14px;
   padding: 24px;
-  width: 420px;
+  width: 320px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
 }
 
-.service-card:hover {
+.coupon-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
 }
 
 
-.service-content {
+.coupon-content {
   display: flex;
-  gap: 20px;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
 }
 
-.service-image {
-  width: 90px;
+.coupon-image {
+  width: 120px;
   height: 120px;
   border-radius: 10px;
   object-fit: cover;
   background-color: white;
-  flex-shrink: 0;
 }
 
-.service-info {
-  text-align: left;
-}
-
-.service-title {
-  font-size: 1.2rem;
+.coupon-title {
+  font-size: 1.3rem;
   font-weight: bold;
-  margin-bottom: 10px;
+  text-align: center;
 }
 
-.service-description {
+.coupon-description {
   font-size: 1rem;
-  line-height: 1.5;
+  text-align: center;
 }
 
 .details-button {

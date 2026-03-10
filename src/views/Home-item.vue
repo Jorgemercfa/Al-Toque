@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import services from '@/data/services.js';
+import coupons from '@/data/coupon.js';
 
 /* =============================
    CARRUSEL PRINCIPAL
@@ -99,15 +99,15 @@ const duplicatedCustomers = [...customers, ...customers];
       las páginas oficiales.
     </div>
     <h1 class="title-home">Ofertas destacadas</h1>
-    <div class="our-services">
+    <div class="our-coupons">
       <router-link
-        v-for="service in services"
-        :key="service.id"
-        :to="{ name: 'ServiceDetails', params: { id: service.id } }"
+        v-for="coupon in coupons"
+        :key="coupon.id"
+        :to="{ name: 'CouponsDetails', params: { id: coupon.id } }"
         class="logs-item"
       >
-        <img class="card-icons" :src="service.image_home" :alt="service.name" />
-        <div>{{ service.name }}</div>
+        <img class="card-icons" :src="coupon.image" :alt="coupon.name" />
+        <div>{{ coupon.name }}</div>
       </router-link>
     </div>
     <h1 class="title-home">Ofertas Restaurantes</h1>
@@ -209,7 +209,7 @@ const duplicatedCustomers = [...customers, ...customers];
   font-size: 18px;
   line-height: 1.7;
 }
-.our-services {
+.our-coupons {
   width: 100%;
   background: linear-gradient(135deg, #325bcd, #2549ad);
   display: flex;
@@ -225,8 +225,8 @@ const duplicatedCustomers = [...customers, ...customers];
   width: 90px;
   height: 90px;
   background-color: white;
-  border-radius: 50%;
-  padding: 18px;
+  border-radius: 15px;
+  /* padding: 18px; */
   object-fit: contain;
   margin-bottom: 20px;
 }
@@ -240,6 +240,7 @@ const duplicatedCustomers = [...customers, ...customers];
   color: #ffffff;
   padding: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
 }
 
 .logs-item:hover {
@@ -364,7 +365,7 @@ const duplicatedCustomers = [...customers, ...customers];
      SERVICIOS
   =============================== */
 
-  .our-services {
+  .our-coupons {
     gap: 20px;
     padding: 50px 20px;
   }
