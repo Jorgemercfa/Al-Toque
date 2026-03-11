@@ -5,21 +5,21 @@ import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
-import usersSeed from '@/data/user.js';
-import { getUsers } from '@/auth/usersRepo';
-import { useSession } from '@/auth/session';
+import usersSeed from '@/data/companies.js';
+import { getUsers } from '@/auth/companiesRepo';
+import { useSession } from '@/auth/session_companies';
 
 const router = useRouter();
 const { login } = useSession();
 
-const email = ref('');
+const ruc = ref('');
 const password = ref('');
 const error = ref('');
 
 const onLogin = () => {
   error.value = '';
 
-  const emailNormalized = email.value.trim().toLowerCase();
+  const rucNormalized = ruc.value.trim().toLowerCase();
 
   // 1) Usuarios registrados vía Sign-up (localStorage)
   const localUsers = getUsers();
@@ -28,11 +28,11 @@ const onLogin = () => {
   const allUsers = [...localUsers, ...usersSeed];
 
   const found = allUsers.find(
-    (u) => (u.email || '').trim().toLowerCase() === emailNormalized,
+    (u) => (u.ruc || '').trim().toLowerCase() === rucNormalized,
   );
 
   if (!found) {
-    error.value = 'El correo no está registrado.';
+    error.value = 'El RUC no está registrado.';
     return;
   }
 
@@ -42,7 +42,7 @@ const onLogin = () => {
   }
 
   login(found);
-  router.push({ name: 'Home' });
+  router.push({ name: 'HomeCompanies' });
 };
 </script>
 
@@ -54,7 +54,7 @@ const onLogin = () => {
 
     <section class="contact-section">
       <div class="contact-container">
-        <h1 class="main-title">Iniciar Sesión</h1>
+        <h1 class="main-title">Iniciar Sesión Empresas</h1>
 
         <div class="contact-card">
           <form class="form-area" @submit.prevent="onLogin" autocomplete="on">
@@ -63,13 +63,8 @@ const onLogin = () => {
             </div>
 
             <div class="form-group">
-              <label>Email</label>
-              <input
-                v-model="email"
-                type="email"
-                required
-                autocomplete="email"
-              />
+              <label>RUC</label>
+              <input v-model="ruc" type="ruc" required autocomplete="ruc" />
             </div>
 
             <div class="form-group">
@@ -86,11 +81,8 @@ const onLogin = () => {
           </form>
 
           <div class="contact-info">
-            <router-link to="/Sign-up">
-              <button class="other-btn" type="button">Registrar usuario</button>
-            </router-link>
-            <router-link to="/Sign-in-companies">
-              <button class="other-btn" type="button">Empresas</button>
+            <router-link to="/Sign-up-companies">
+              <button class="other-btn" type="button">Registrar empresa</button>
             </router-link>
           </div>
         </div>
