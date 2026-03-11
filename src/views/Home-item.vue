@@ -2,7 +2,7 @@
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import coupons from '@/data/coupon.js';
 
 /* =============================
@@ -80,6 +80,33 @@ const scrollCouponsBy = (direction) => {
 
 const scrollCouponsLeft = () => scrollCouponsBy(-1);
 const scrollCouponsRight = () => scrollCouponsBy(1);
+
+/* =============================
+   FILTRO: SOLO RESTAURANTES
+============================= */
+const restaurantCoupons = computed(() =>
+  coupons.filter((c) => c.category === 'Restaurantes'),
+);
+
+/* =============================
+   CARRUSEL RESTAURANTES (scroll)
+============================= */
+const restaurantTrackRef = ref(null);
+
+const scrollRestaurantsBy = (direction) => {
+  const el = restaurantTrackRef.value;
+  if (!el) return;
+
+  const card = el.querySelector('.logs-item');
+  const cardWidth = card ? card.getBoundingClientRect().width : 220;
+  const gap = 20;
+  const step = cardWidth + gap;
+
+  el.scrollBy({ left: direction * step, behavior: 'smooth' });
+};
+
+const scrollRestaurantsLeft = () => scrollRestaurantsBy(-1);
+const scrollRestaurantsRight = () => scrollRestaurantsBy(1);
 </script>
 
 <template>
@@ -158,44 +185,56 @@ const scrollCouponsRight = () => scrollCouponsBy(1);
     </div>
 
     <h1 class="title-home">Ofertas Restaurantes</h1>
-    <div class="our-sector">
-      <div class="logs-item">
-        <img class="card-icons" src="@/assets/office.svg" alt="office" />
-        <div>OFICINAS</div>
+    <div class="our-coupons-wrapper">
+      <button
+        class="coupons-nav coupons-nav-left"
+        type="button"
+        aria-label="Anterior"
+        @click="scrollRestaurantsLeft"
+      >
+        ‹
+      </button>
+
+      <div class="our-coupons" ref="restaurantTrackRef">
+        <router-link
+          v-for="coupon in restaurantCoupons"
+          :key="coupon.id"
+          :to="{ name: 'CouponsDetails', params: { id: coupon.id } }"
+          class="logs-item"
+        >
+          <div class="coupon-mini-badge">
+            {{ coupon.percentage }}
+          </div>
+
+          <img class="card-icons" :src="coupon.image" :alt="coupon.name" />
+
+          <div class="coupon-mini-info">
+            <h4 class="coupon-mini-title">
+              {{ coupon.name }}
+            </h4>
+
+            <div class="coupon-mini-price">S/ {{ coupon.discount_price }}</div>
+
+            <div class="coupon-mini-date">
+              Hasta {{ coupon.expiration_date }}
+            </div>
+          </div>
+        </router-link>
+
+        <!-- Si no hay restaurantes, muestra un mensajito -->
+        <div v-if="restaurantCoupons.length === 0" class="empty-carousel">
+          No hay cupones de restaurantes todavía.
+        </div>
       </div>
 
-      <div class="logs-item">
-        <img
-          class="card-icons"
-          src="@/assets/restaurant.svg"
-          alt="restaurant"
-        />
-        <div>RESTAURANTES</div>
-      </div>
-
-      <div class="logs-item">
-        <img class="card-icons" src="@/assets/storage.svg" alt="storage" />
-        <div>ALMACENES</div>
-      </div>
-
-      <div class="logs-item">
-        <img class="card-icons" src="@/assets/factory.svg" alt="factory" />
-        <div>PLANTAS DE PRODUCCIÓN</div>
-      </div>
-
-      <div class="logs-item">
-        <img
-          class="card-icons"
-          src="@/assets/laboratory.svg"
-          alt="laboratory"
-        />
-        <div>LABORATORIOS</div>
-      </div>
-
-      <div class="logs-item">
-        <img class="card-icons" src="@/assets/store.svg" alt="store" />
-        <div>LOCALES COMERCIALES</div>
-      </div>
+      <button
+        class="coupons-nav coupons-nav-right"
+        type="button"
+        aria-label="Siguiente"
+        @click="scrollRestaurantsRight"
+      >
+        ›
+      </button>
     </div>
 
     <h1 class="title-home">Empresas con las que trabajamos</h1>
