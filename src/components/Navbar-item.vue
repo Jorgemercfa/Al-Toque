@@ -22,33 +22,44 @@
       <router-link @click="closeMenu" to="" class="text-navbar"
         ><a href=""><i class="pi pi-shopping-cart"></i></a
       ></router-link>
-      <router-link @click="closeMenu" to="/Sign-in" class="text-navbar"
-        ><a href=""><i class="pi pi-sign-in"></i></a
-      ></router-link>
-      <!-- <router-link @click="closeMenu" to="" class="text-navbar"
-        ><a href=""><i class="pi pi-user"></i></a
-      ></router-link> -->
+
+      <!-- Auth buttons -->
+      <router-link
+        v-if="!isAuthenticated"
+        @click="closeMenu"
+        to="/Sign-in"
+        class="text-navbar"
+        aria-label="Iniciar sesión"
+        title="Iniciar sesión"
+      >
+        <i class="pi pi-sign-in"></i>
+      </router-link>
+
+      <router-link
+        v-else
+        @click="closeMenu"
+        to="/Profile"
+        class="text-navbar"
+        aria-label="Perfil"
+        title="Perfil"
+      >
+        <i class="pi pi-user"></i>
+      </router-link>
     </div>
+
     <div class="hamburger" @click="toggleMenu">☰</div>
   </nav>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      menuOpen: false,
-    };
-  },
-  methods: {
-    toggleMenu() {
-      this.menuOpen = !this.menuOpen;
-    },
-    closeMenu() {
-      this.menuOpen = false;
-    },
-  },
-};
+<script setup>
+import { ref } from 'vue';
+import { useSession } from '@/auth/session';
+
+const menuOpen = ref(false);
+const toggleMenu = () => (menuOpen.value = !menuOpen.value);
+const closeMenu = () => (menuOpen.value = false);
+
+const { isAuthenticated } = useSession(); // úsalo directo en el template
 </script>
 
 <style>

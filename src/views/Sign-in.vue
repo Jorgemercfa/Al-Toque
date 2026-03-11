@@ -1,11 +1,38 @@
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
+import users from '@/data/user.js';
+import { useSession } from '@/auth/session';
+
+const router = useRouter();
+const { login, isAuthenticated } = useSession();
+
+const email = ref('');
+const password = ref('');
+const error = ref('');
+
 const onLogin = () => {
-  // Aquí NO se envía nada automáticamente.
-  // Luego podrías llamar a tu API de login con fetch/axios si lo necesitas.
-  console.log('Intento de inicio de sesión (sin envío automático del form)');
+  error.value = '';
+
+  const found = users.find(
+    (u) =>
+      u.email?.toLowerCase() === email.value.trim().toLowerCase() &&
+      u.password === password.value,
+  );
+
+  if (!found) {
+    error.value = 'Email o contraseña incorrectos.';
+    return;
+  }
+
+  login(found);
+
+  // Si ya inició sesión correctamente, lo mandamos al perfil (o Home)
+  if (isAuthenticated.value) router.push({ name: 'Profile' });
 };
 </script>
 
@@ -20,18 +47,26 @@ const onLogin = () => {
         <h1 class="main-title">Iniciar Sesión</h1>
 
         <div class="contact-card">
-          <!-- FORMULARIO LOGIN (NO ENVÍA MENSAJES) -->
           <form class="form-area" @submit.prevent="onLogin" autocomplete="on">
+            <div v-if="error" style="color: #b00020; font-weight: 600">
+              {{ error }}
+            </div>
+
             <div class="form-group">
               <label>Email</label>
-              <input type="email" name="email" required autocomplete="email" />
+              <input
+                v-model="email"
+                type="email"
+                required
+                autocomplete="email"
+              />
             </div>
 
             <div class="form-group">
               <label>Contraseña</label>
               <input
+                v-model="password"
                 type="password"
-                name="password"
                 required
                 autocomplete="current-password"
               />
@@ -40,13 +75,14 @@ const onLogin = () => {
             <button type="submit" class="submit-btn">Iniciar sesión</button>
           </form>
 
-          <!-- INFORMACIÓN (opcional) -->
           <div class="contact-info">
             <router-link to="/Sign-up">
-              <button class="submit-btn">Registrar usuario</button>
+              <button class="submit-btn" type="button">
+                Registrar usuario
+              </button>
             </router-link>
             <router-link to="/Coupon-item">
-              <button class="submit-btn">Empresas</button>
+              <button class="submit-btn" type="button">Empresas</button>
             </router-link>
           </div>
         </div>
