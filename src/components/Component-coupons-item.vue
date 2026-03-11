@@ -1,16 +1,35 @@
 <script setup>
-import { computed, onMounted, watch, nextTick } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 import coupons from '@/data/coupon.js';
+import { useCart } from '@/store/cart.js';
+import { useSession } from '@/auth/session';
 
 const route = useRoute();
+const router = useRouter();
+const { addToCart } = useCart();
+const { isAuthenticated } = useSession();
 
 const coupon = computed(() =>
   coupons.find((s) => s.id === Number(route.params.id)),
 );
+
+const addedFeedback = ref(false);
+
+function handleAddToCart() {
+  if (!isAuthenticated.value) {
+    router.push({ name: 'SignIn' });
+    return;
+  }
+  addToCart(coupon.value.id);
+  addedFeedback.value = true;
+  setTimeout(() => {
+    addedFeedback.value = false;
+  }, 1500);
+}
 
 // Busca el “scroll container” real (si existiera)
 function getScrollContainer() {
@@ -126,8 +145,8 @@ watch(
           <strong>{{ coupon.coupon_code }}</strong>
         </div>
 
-        <button class="buy-button">
-          {{ coupon.buy_button }}
+        <button class="buy-button" @click="handleAddToCart">
+          {{ addedFeedback ? '✓ Agregado' : 'Agregar al carrito' }}
         </button>
       </div>
     </div>

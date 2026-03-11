@@ -125,7 +125,7 @@ export default [
     details_button: 'Entrar Aqui',
   },
   {
-    id: 1,
+    id: 8,
     name: 'Cine Moon',
     shortDescription: '2 por 1 en entradas de cine los miércoles',
     longDescription:

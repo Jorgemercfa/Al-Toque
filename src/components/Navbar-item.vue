@@ -19,9 +19,10 @@
       <router-link @click="closeMenu" to="/Contact-item" class="text-navbar"
         >Ayuda</router-link
       >
-      <router-link @click="closeMenu" to="" class="text-navbar"
-        ><a href=""><i class="pi pi-shopping-cart"></i></a
-      ></router-link>
+      <router-link @click="closeMenu" to="/Cart" class="text-navbar cart-link">
+        <i class="pi pi-shopping-cart"></i>
+        <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+      </router-link>
 
       <!-- Auth buttons -->
       <router-link
@@ -54,12 +55,14 @@
 <script setup>
 import { ref } from 'vue';
 import { useSession } from '@/auth/session';
+import { useCart } from '@/store/cart.js';
 
 const menuOpen = ref(false);
 const toggleMenu = () => (menuOpen.value = !menuOpen.value);
 const closeMenu = () => (menuOpen.value = false);
 
-const { isAuthenticated } = useSession(); // úsalo directo en el template
+const { isAuthenticated } = useSession();
+const { cartCount } = useCart();
 </script>
 
 <style>
@@ -177,6 +180,27 @@ html {
   .router-link-active::after {
     width: 0;
   }
+}
+
+.cart-link {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #e53935;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 @keyframes fadeIn {
