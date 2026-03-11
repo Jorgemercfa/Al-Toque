@@ -5,11 +5,12 @@ import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
-import users from '@/data/user.js';
+import usersSeed from '@/data/user.js';
+import { getUsers } from '@/auth/usersRepo';
 import { useSession } from '@/auth/session';
 
 const router = useRouter();
-const { login, isAuthenticated } = useSession();
+const { login } = useSession();
 
 const email = ref('');
 const password = ref('');
@@ -18,21 +19,30 @@ const error = ref('');
 const onLogin = () => {
   error.value = '';
 
-  const found = users.find(
-    (u) =>
-      u.email?.toLowerCase() === email.value.trim().toLowerCase() &&
-      u.password === password.value,
+  const emailNormalized = email.value.trim().toLowerCase();
+
+  // 1) Usuarios registrados vía Sign-up (localStorage)
+  const localUsers = getUsers();
+
+  // 2) (Opcional) usuarios “seed” del archivo src/data/user.js como fallback demo
+  const allUsers = [...localUsers, ...usersSeed];
+
+  const found = allUsers.find(
+    (u) => (u.email || '').trim().toLowerCase() === emailNormalized,
   );
 
   if (!found) {
-    error.value = 'Email o contraseña incorrectos.';
+    error.value = 'El correo no está registrado.';
+    return;
+  }
+
+  if (found.password !== password.value) {
+    error.value = 'Contraseña incorrecta.';
     return;
   }
 
   login(found);
-
-  // Si ya inició sesión correctamente, lo mandamos al perfil (o Home)
-  if (isAuthenticated.value) router.push({ name: 'Profile' });
+  router.push({ name: 'Profile' });
 };
 </script>
 

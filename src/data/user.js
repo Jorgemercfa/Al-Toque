@@ -6,4 +6,11 @@ export default [
     password: '123456789',
     coupons: [],
   },
+  {
+    id: 2,
+    name: 'Juan',
+    email: 'juanvilla@outlook.com',
+    password: '123456789',
+    coupons: [],
+  },
 ];
