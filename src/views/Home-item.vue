@@ -11,7 +11,7 @@ import coupons from '@/data/coupon.js';
 
 import img1 from '@/assets/picture1.png';
 import img2 from '@/assets/picture2.png';
-import img3 from '@/assets/picture3.jpg';
+import img3 from '@/assets/picture3.png';
 import img4 from '@/assets/picture4.png';
 
 const images = [img1, img2, img3, img4];

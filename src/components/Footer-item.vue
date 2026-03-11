@@ -20,10 +20,16 @@ const year = new Date().getFullYear();
             <a href=""><i class="pi pi-facebook"></i></a>
           </div>
           <div>
-            <a href=""><i class="pi pi-linkedin"></i></a>
+            <a href=""><i class="pi pi-instagram"></i></a>
           </div>
           <div>
-            <i class="pi pi-whatsapp"></i>
+            <a href=""><i class="pi pi-youtube"></i></a>
+          </div>
+          <div>
+            <a href=""><i class="pi pi-twitter"></i></a>
+          </div>
+          <div>
+            <a href=""><i class="pi pi-tiktok"></i></a>
           </div>
         </div>
       </div>
