@@ -4,6 +4,7 @@ import coupon3 from '@/assets/coupon3.png';
 import coupon4 from '@/assets/coupon4.png';
 import coupon5 from '@/assets/coupon5.png';
 import coupon6 from '@/assets/coupon6.png';
+import coupon7 from '@/assets/coupon7.png';
 
 export default [
   {
@@ -103,6 +104,40 @@ export default [
     Terms_of_use: 'Válido en productos seleccionados.',
     coupon_code: 'MODA20',
     category: 'Moda',
+    buy_button: 'COMPRAR',
+    details_button: 'Entrar Aqui',
+  },
+  {
+    id: 7,
+    name: 'Hamburguesa Victor',
+    shortDescription: '15% de descuento en hamburguesas seleccionadas',
+    longDescription:
+      'Disfruta con un 15% de descuento en hamburguesas seleccionadas.',
+    image: coupon7,
+    percentage: '15%',
+    original_price: 20,
+    discount_price: 17,
+    expiration_date: '05/11/2026',
+    Terms_of_use: 'Válido solo para combos de una carne.',
+    coupon_code: 'Hamburguesa15',
+    category: 'Restaurantes',
+    buy_button: 'COMPRAR',
+    details_button: 'Entrar Aqui',
+  },
+  {
+    id: 1,
+    name: 'Cine Moon',
+    shortDescription: '2 por 1 en entradas de cine los miércoles',
+    longDescription:
+      '2 por 1  todos los miércoles en entradas de cine en Cine Moon.',
+    image: coupon1,
+    percentage: '2 x 1 ',
+    original_price: 20,
+    discount_price: 10,
+    expiration_date: '30/09/2026',
+    Terms_of_use: 'valido solo miércoles',
+    coupon_code: 'CINEMOON20',
+    category: 'Entretenimiento',
     buy_button: 'COMPRAR',
     details_button: 'Entrar Aqui',
   },
