@@ -77,12 +77,10 @@ const onLogin = () => {
 
           <div class="contact-info">
             <router-link to="/Sign-up">
-              <button class="submit-btn" type="button">
-                Registrar usuario
-              </button>
+              <button class="other-btn" type="button">Registrar usuario</button>
             </router-link>
             <router-link to="/Coupon-item">
-              <button class="submit-btn" type="button">Empresas</button>
+              <button class="other-btn" type="button">Empresas</button>
             </router-link>
           </div>
         </div>
@@ -191,6 +189,24 @@ const onLogin = () => {
 }
 
 .submit-btn:hover {
+  background-color: #2549ad;
+  transform: translateY(-2px);
+}
+
+.other-btn {
+  margin-top: 10px;
+  padding: 14px;
+  width: 50%;
+  border-radius: 12px;
+  border: none;
+  background-color: #325bcd;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.other-btn:hover {
   background-color: #2549ad;
   transform: translateY(-2px);
 }

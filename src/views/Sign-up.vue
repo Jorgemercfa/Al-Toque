@@ -26,7 +26,10 @@ const onLogin = () => {
               <label>Email</label>
               <input type="email" name="email" required autocomplete="email" />
             </div>
-
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" name="name" required autocomplete="name" />
+            </div>
             <div class="form-group">
               <label>Contraseña</label>
               <input
