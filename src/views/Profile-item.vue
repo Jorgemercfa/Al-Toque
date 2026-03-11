@@ -1,11 +1,27 @@
 <script setup>
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 import { useSession } from '@/auth/session';
+import { useCart } from '@/store/cart.js';
 
 const router = useRouter();
 const { state, logout } = useSession();
+const { getPurchasedCoupons } = useCart();
+
+const purchasedCoupons = computed(() =>
+  state.user ? getPurchasedCoupons(state.user.id) : [],
+);
+
+function formatDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('es-PE', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
 
 const onLogout = () => {
   logout();
@@ -38,6 +54,28 @@ const onLogout = () => {
             <button class="submit-btn" type="button" @click="onLogout">
               Cerrar sesión
             </button>
+          </div>
+        </div>
+
+        <!-- Purchased coupons -->
+        <div class="coupons-section">
+          <h2 class="section-title">Mis cupones adquiridos</h2>
+          <div v-if="purchasedCoupons.length > 0" class="coupons-grid">
+            <div v-for="(c, i) in purchasedCoupons" :key="i" class="coupon-card">
+              <img :src="c.image" :alt="c.name" class="coupon-img" />
+              <div class="coupon-body">
+                <h3 class="coupon-name">{{ c.name }}</h3>
+                <div class="coupon-code-box">{{ c.coupon_code }}</div>
+                <p class="coupon-date">Comprado el {{ formatDate(c.purchasedAt) }}</p>
+                <p class="coupon-price">S/ {{ c.discount_price?.toFixed(2) }}</p>
+              </div>
+            </div>
+          </div>
+          <div v-else class="no-coupons">
+            <p>Aún no tienes cupones adquiridos.</p>
+            <router-link to="/Coupon-item">
+              <button class="browse-btn">Ver cupones disponibles</button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -124,6 +162,121 @@ const onLogout = () => {
 }
 .submit-btn:hover {
   background-color: #2549ad;
+  transform: translateY(-2px);
+}
+
+/* Purchased coupons section */
+.coupons-section {
+  margin-top: 50px;
+}
+
+.section-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #111;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  width: 60px;
+  height: 3px;
+  background-color: #325bcd;
+  display: block;
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+.coupons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.coupon-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.coupon-card:hover {
+  transform: translateY(-4px);
+}
+
+.coupon-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.coupon-body {
+  padding: 16px;
+}
+
+.coupon-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 10px;
+}
+
+.coupon-code-box {
+  background: #325bcd;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  cursor: default;
+  user-select: all;
+}
+
+.coupon-date {
+  font-size: 0.8rem;
+  color: #888;
+  margin: 0 0 4px;
+}
+
+.coupon-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #325bcd;
+  margin: 0;
+}
+
+.no-coupons {
+  text-align: center;
+  padding: 50px 20px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+}
+
+.no-coupons p {
+  font-size: 1.05rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.browse-btn {
+  padding: 12px 28px;
+  background: #325bcd;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.2s;
+}
+
+.browse-btn:hover {
+  background: #2549ad;
   transform: translateY(-2px);
 }
 </style>

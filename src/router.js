@@ -11,6 +11,10 @@ import SignIn from './views/Sign-in.vue';
 import SignUp from './views/Sign-up.vue';
 import Profile from './views/Profile-item.vue';
 
+import Cart from './views/Cart-item.vue';
+import Checkout from './views/Checkout-item.vue';
+import OrderConfirmation from './views/OrderConfirmation-item.vue';
+
 import { useSession } from './auth/session';
 
 const routes = [
@@ -29,6 +33,10 @@ const routes = [
     component: Profile,
     meta: { requiresAuth: true },
   },
+
+  { path: '/Cart', name: 'Cart', component: Cart, meta: { requiresAuth: true } },
+  { path: '/Checkout', name: 'Checkout', component: Checkout, meta: { requiresAuth: true } },
+  { path: '/OrderConfirmation', name: 'OrderConfirmation', component: OrderConfirmation, meta: { requiresAuth: true } },
 
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ];
