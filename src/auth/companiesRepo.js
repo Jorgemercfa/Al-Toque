@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'al-toque-users';
+const STORAGE_KEY = 'al-toque-companies';
 
 function safeParse(json) {
   try {
@@ -8,7 +8,7 @@ function safeParse(json) {
   }
 }
 
-export function getUsers() {
+export function getCompany() {
   return safeParse(localStorage.getItem(STORAGE_KEY)) || [];
 }
 
@@ -16,16 +16,16 @@ export function findUserByRuc(ruc) {
   const normalized = String(ruc || '')
     .trim()
     .toLowerCase();
-  return getUsers().find((u) => u.ruc?.toLowerCase() === normalized) || null;
+  return getCompany().find((u) => u.ruc?.toLowerCase() === normalized) || null;
 }
 
 export function addUser({ name, ruc, password }) {
-  const users = getUsers();
+  const companies = getCompany();
 
   const normalizedRuc = String(ruc || '')
     .trim()
     .toLowerCase();
-  const exists = users.some((u) => u.ruc?.toLowerCase() === normalizedRuc);
+  const exists = companies.some((u) => u.ruc?.toLowerCase() === normalizedRuc);
   if (exists) {
     throw new Error('Este RUC ya está registrado.');
   }
@@ -38,8 +38,8 @@ export function addUser({ name, ruc, password }) {
     coupons: [],
   };
 
-  users.push(newUser);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+  companies.push(newUser);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(companies));
 
   return newUser;
 }
