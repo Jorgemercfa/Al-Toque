@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
 import usersSeed from '@/data/companies.js';
-import { getUsers } from '@/auth/companiesRepo';
+import { getCompany } from '@/auth/companiesRepo';
 import { useSession } from '@/auth/session_companies';
 
 const router = useRouter();
@@ -22,7 +22,7 @@ const onLogin = () => {
   const rucNormalized = ruc.value.trim().toLowerCase();
 
   // 1) Usuarios registrados vía Sign-up (localStorage)
-  const localUsers = getUsers();
+  const localUsers = getCompany();
 
   // 2) (Opcional) usuarios “seed” del archivo src/data/user.js como fallback demo
   const allUsers = [...localUsers, ...usersSeed];
