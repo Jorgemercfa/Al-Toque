@@ -19,6 +19,15 @@
       <router-link @click="closeMenu" to="/Contact-item" class="text-navbar"
         >Ayuda</router-link
       >
+      <router-link @click="closeMenu" to="" class="text-navbar"
+        ><a href=""><i class="pi pi-shopping-cart"></i></a
+      ></router-link>
+      <router-link @click="closeMenu" to="/Sign-in" class="text-navbar"
+        ><a href=""><i class="pi pi-sign-in"></i></a
+      ></router-link>
+      <!-- <router-link @click="closeMenu" to="" class="text-navbar"
+        ><a href=""><i class="pi pi-user"></i></a
+      ></router-link> -->
     </div>
     <div class="hamburger" @click="toggleMenu">☰</div>
   </nav>
@@ -73,6 +82,12 @@ html {
   display: flex;
   align-items: center;
   gap: 25px;
+}
+
+.pi {
+  font-size: 20px;
+  color: white;
+  transition: color 0.3s ease;
 }
 
 .text-navbar {
