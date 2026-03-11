@@ -71,27 +71,64 @@ watch(
 
   <main class="container">
     <div v-if="coupon" class="coupon-wrapper">
-      <router-link to="/coupons-item" class="return-area">
+      <!-- regresar -->
+      <router-link to="/Coupon-item" class="return-area">
         <button class="card-button">Regresar</button>
       </router-link>
 
-      <h1 class="title">
-        {{ coupon.name }}
-      </h1>
+      <!-- titulo -->
+      <h1 class="title">{{ coupon.name }}</h1>
 
+      <!-- imagen -->
       <img
         v-if="coupon.image"
         class="coupon-image-details"
         :src="coupon.image"
-        :alt="coupon.name"
       />
 
+      <!-- badge -->
+      <div class="coupon-badge">
+        {{ coupon.percentage }}
+      </div>
+
+      <!-- precios -->
+      <div class="coupon-prices">
+        <span class="original-price">S/ {{ coupon.original_price }}</span>
+        <span class="discount-price">S/ {{ coupon.discount_price }}</span>
+      </div>
+
+      <!-- descripción -->
       <div class="text-coupon-type">
         {{ coupon.longDescription }}
       </div>
 
-      <div v-if="coupon.video1" class="video-container">
-        <iframe :src="coupon.video1" frameborder="0" allowfullscreen></iframe>
+      <!-- info -->
+      <div class="coupon-details">
+        <div class="coupon-info">
+          <div class="info-item">
+            <span class="label">Categoría</span>
+            <span class="value">{{ coupon.category }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="label">Válido hasta</span>
+            <span class="value">{{ coupon.expiration_date }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="label">Términos</span>
+            <span class="value">{{ coupon.Terms_of_use }}</span>
+          </div>
+        </div>
+
+        <div class="coupon-code">
+          <span>Código:</span>
+          <strong>{{ coupon.coupon_code }}</strong>
+        </div>
+
+        <button class="buy-button">
+          {{ coupon.buy_button }}
+        </button>
       </div>
     </div>
 
@@ -161,24 +198,86 @@ watch(
   margin-bottom: 40px;
 }
 
-.video-container {
-  position: relative;
-  width: 100%;
-  max-width: 1000px;
-  padding-bottom: 56.25%;
-  height: 0;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+.coupon-prices {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 8px;
 }
 
-.video-container iframe {
-  position: absolute;
+.original-price {
+  text-decoration: line-through;
+  color: #dcdcdc;
+  font-size: 0.95rem;
+}
+
+.discount-price {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1f1f1f;
+}
+
+.coupon-details {
   width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
+  max-width: 600px;
+  margin-top: 30px;
+}
+
+/* contenedor de información */
+.coupon-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+/* cada dato */
+.info-item {
+  background: #f7f7f7;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+/* etiqueta */
+.label {
+  display: block;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* valor */
+.value {
+  font-weight: 600;
+  color: #222;
+}
+
+/* código del cupón */
+.coupon-code {
+  background: #325bcd;
+  color: white;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+/* botón comprar */
+.buy-button {
+  width: 100%;
+  background: #1f1f1f;
+  color: white;
   border: none;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.buy-button:hover {
+  background: #000;
 }
 
 .card-button {
@@ -190,6 +289,16 @@ watch(
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+.coupon-badge {
+  top: 10px;
+  right: 10px;
+  background: #ffd700;
+  color: #000;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 
 .card-button:hover {

@@ -106,8 +106,21 @@ const duplicatedCustomers = [...customers, ...customers];
         :to="{ name: 'CouponsDetails', params: { id: coupon.id } }"
         class="logs-item"
       >
+        <div class="coupon-mini-badge">
+          {{ coupon.percentage }}
+        </div>
+
         <img class="card-icons" :src="coupon.image" :alt="coupon.name" />
-        <div>{{ coupon.name }}</div>
+
+        <div class="coupon-mini-info">
+          <h4 class="coupon-mini-title">
+            {{ coupon.name }}
+          </h4>
+
+          <div class="coupon-mini-price">S/ {{ coupon.discount_price }}</div>
+
+          <div class="coupon-mini-date">Hasta {{ coupon.expiration_date }}</div>
+        </div>
       </router-link>
     </div>
     <h1 class="title-home">Ofertas Restaurantes</h1>
@@ -257,6 +270,64 @@ const duplicatedCustomers = [...customers, ...customers];
   justify-content: center;
   align-items: center;
   gap: 20px;
+}
+
+.our-coupons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.logs-item {
+  position: relative;
+  background: #1f1f1f;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  text-decoration: none;
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: 0.25s;
+}
+
+.logs-item:hover {
+  transform: translateY(-4px);
+}
+
+.card-icons {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.coupon-mini-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.coupon-mini-price {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.coupon-mini-date {
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+
+.coupon-mini-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ffd700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
 }
 
 /* ===============================

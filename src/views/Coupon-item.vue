@@ -94,8 +94,8 @@ const router = useRouter()
 }
 
 .coupon-image {
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
   border-radius: 10px;
   object-fit: cover;
   background-color: white;
