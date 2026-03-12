@@ -1,174 +1,299 @@
-<template>
-  <nav class="navbar-company">
-    <div class="nav-logo">
-      <router-link to="/Home-companies">
-        <img class="logo" src="@/assets/company-logo.jpg" />
-      </router-link>
-    </div>
-
-    <div class="link-style-company" :class="{ 'show-menu': menuOpen }">
-      <router-link
-        @click="closeMenu"
-        to="/Home-companies"
-        class="text-navbar-company"
-      >
-        Inicio
-      </router-link>
-      <router-link
-        @click="closeMenu"
-        to="/Company-coupons"
-        class="text-navbar-company"
-      >
-        Mis Cupones
-      </router-link>
-      <router-link
-        @click="closeMenu"
-        to="/Create-coupon"
-        class="text-navbar-company"
-      >
-        Crear Cupón
-      </router-link>
-      <router-link
-        @click="closeMenu"
-        to="/Company-profile"
-        class="text-navbar-company"
-      >
-        <i class="pi pi-building"></i>
-      </router-link>
-    </div>
-
-    <div class="hamburger-company" @click="toggleMenu">☰</div>
-  </nav>
-</template>
-
 <script setup>
-import { ref } from 'vue';
+import { computed } from 'vue';
+import NavbarCompanies from '@/components/Navbar-company-item.vue';
+import Footer from '@/components/Footer-item.vue';
+import { useSessionCompany } from '@/auth/session_companies';
 
-const menuOpen = ref(false);
-const toggleMenu = () => (menuOpen.value = !menuOpen.value);
-const closeMenu = () => (menuOpen.value = false);
+const { state } = useSessionCompany();
+
+const companyName = computed(() => state.company?.name || 'Empresa');
+
+// Fecha formateada
+const today = new Date().toLocaleDateString('es-PE', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
 </script>
 
+<template>
+  <div class="page-wrapper-company">
+    <header>
+      <NavbarCompanies />
+    </header>
+
+    <main class="dashboard-section">
+      <div class="dashboard-container">
+        <!-- Bienvenida -->
+        <div class="welcome-area">
+          <h1 class="welcome-title">
+            Bienvenido, <span class="company-highlight">{{ companyName }}</span>
+          </h1>
+          <p class="welcome-date">{{ today }}</p>
+        </div>
+
+        <!-- Tarjetas de acciones rápidas -->
+        <div class="quick-actions">
+          <router-link to="/Create-coupon" class="action-card create-card">
+            <div class="action-icon">
+              <i class="pi pi-plus-circle"></i>
+            </div>
+            <h3>Crear Cupón</h3>
+            <p>Publica una nueva oferta para tus clientes</p>
+          </router-link>
+
+          <router-link to="/Company-coupons" class="action-card coupons-card">
+            <div class="action-icon">
+              <i class="pi pi-tags"></i>
+            </div>
+            <h3>Mis Cupones</h3>
+            <p>Administra y revisa tus cupones activos</p>
+          </router-link>
+
+          <router-link to="/Company-profile" class="action-card profile-card">
+            <div class="action-icon">
+              <i class="pi pi-building"></i>
+            </div>
+            <h3>Mi Empresa</h3>
+            <p>Visualiza y edita el perfil de tu empresa</p>
+          </router-link>
+        </div>
+
+        <!-- Sección informativa -->
+        <div class="info-section">
+          <div class="info-card">
+            <h2 class="info-title">
+              <i class="pi pi-chart-line"></i> Panel de Empresa
+            </h2>
+            <p class="info-text">
+              Desde aquí puedes gestionar todos los aspectos de tu presencia en
+              Al Toque. Crea cupones atractivos, revisa el rendimiento de tus
+              ofertas y mantén actualizada la información de tu empresa.
+            </p>
+          </div>
+
+          <div class="tips-card">
+            <h2 class="tips-title"><i class="pi pi-lightbulb"></i> Consejos</h2>
+            <ul class="tips-list">
+              <li>
+                <strong>Descuentos claros:</strong> Usa porcentajes y precios
+                visibles para atraer más clientes.
+              </li>
+              <li>
+                <strong>Imágenes de calidad:</strong> Una buena foto aumenta las
+                conversiones hasta un 40%.
+              </li>
+              <li>
+                <strong>Códigos únicos:</strong> Genera códigos fáciles de
+                recordar para tus cupones.
+              </li>
+              <li>
+                <strong>Fechas estratégicas:</strong> Lanza ofertas en fechas
+                clave como fines de semana y feriados.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <Footer />
+    </footer>
+  </div>
+</template>
+
 <style scoped>
-.navbar-company {
-  background: linear-gradient(90deg, #1a1a2e, #16213e);
-  height: 70px;
+.page-wrapper-company {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 30px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.navbar-company .logo {
-  height: 45px;
-  width: auto;
-  border-radius: 6px;
-}
-
-.link-style-company {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-}
-
-.text-navbar-company {
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #0d1117;
   color: #e0e0e0;
-  text-decoration: none;
-  font-size: 0.95rem;
-  position: relative;
-  transition: 0.3s ease;
+  font-family: Outfit, Inter, Avenir, Helvetica, Arial, sans-serif;
 }
 
-.text-navbar-company:hover {
+.dashboard-section {
+  flex: 1;
+  padding: 100px 0 60px 0;
+}
+
+.dashboard-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* ─── Bienvenida ─── */
+.welcome-area {
+  margin-bottom: 50px;
+}
+
+.welcome-title {
+  font-size: 2.4rem;
+  font-weight: 700;
   color: #ffffff;
+  margin-bottom: 8px;
 }
 
-.text-navbar-company::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #4fc3f7;
-  transition: 0.3s ease;
-}
-
-.text-navbar-company:hover::after {
-  width: 100%;
-}
-
-.router-link-active.text-navbar-company {
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.router-link-active.text-navbar-company::after {
-  width: 100%;
-}
-
-.text-navbar-company .pi {
-  font-size: 20px;
-  color: #e0e0e0;
-  transition: color 0.3s ease;
-}
-
-.text-navbar-company:hover .pi {
+.company-highlight {
   color: #4fc3f7;
 }
 
-.hamburger-company {
-  display: none;
-  font-size: 26px;
-  color: white;
+.welcome-date {
+  font-size: 1rem;
+  color: #888;
+  text-transform: capitalize;
+}
+
+/* ─── Acciones rápidas ─── */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 50px;
+}
+
+.action-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-decoration: none;
+  color: #e0e0e0;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
-/* MOBILE */
-@media (max-width: 900px) {
-  .link-style-company {
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    flex-direction: column;
-    background: linear-gradient(180deg, #1a1a2e, #0f3460);
-    padding: 25px 0;
-    gap: 20px;
-    display: none;
-    animation: fadeInCompany 0.3s ease;
-  }
-
-  .link-style-company.show-menu {
-    display: flex;
-  }
-
-  .hamburger-company {
-    display: block;
-  }
-
-  .text-navbar-company {
-    text-align: center;
-    padding: 10px 0;
-  }
-
-  .text-navbar-company::after {
-    display: none;
-  }
+.action-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
-@keyframes fadeInCompany {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
+.create-card:hover {
+  border-color: #4fc3f7;
+}
+
+.coupons-card:hover {
+  border-color: #66bb6a;
+}
+
+.profile-card:hover {
+  border-color: #ffa726;
+}
+
+.action-icon {
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+}
+
+.create-card .action-icon {
+  color: #4fc3f7;
+}
+
+.coupons-card .action-icon {
+  color: #66bb6a;
+}
+
+.profile-card .action-icon {
+  color: #ffa726;
+}
+
+.action-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.action-card p {
+  font-size: 0.9rem;
+  color: #888;
+  line-height: 1.5;
+}
+
+/* ─── Sección informativa ─── */
+.info-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.info-card,
+.tips-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.info-title,
+.tips-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-title .pi {
+  color: #4fc3f7;
+}
+
+.tips-title .pi {
+  color: #ffa726;
+}
+
+.info-text {
+  font-size: 0.95rem;
+  color: #aaa;
+  line-height: 1.8;
+}
+
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tips-list li {
+  font-size: 0.93rem;
+  color: #aaa;
+  line-height: 1.6;
+  padding-left: 20px;
+  position: relative;
+}
+
+.tips-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #4fc3f7;
+  font-weight: bold;
+}
+
+.tips-list li strong {
+  color: #e0e0e0;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .welcome-title {
+    font-size: 1.8rem;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .info-section {
+    grid-template-columns: 1fr;
   }
 }
 </style>

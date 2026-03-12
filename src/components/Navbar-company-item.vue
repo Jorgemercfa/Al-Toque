@@ -128,7 +128,6 @@ const closeMenu = () => (menuOpen.value = false);
   cursor: pointer;
 }
 
-/* MOBILE */
 @media (max-width: 900px) {
   .link-style-company {
     position: absolute;
