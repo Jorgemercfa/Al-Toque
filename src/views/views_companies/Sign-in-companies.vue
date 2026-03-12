@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
 import companiesSeed from '@/data/company.js';
-import { getCompany } from '@/auth/companiesRepo';
+import { getCompanies } from '@/auth/companiesRepo';
 import { useSessionCompany } from '@/auth/session_companies';
 
 const router = useRouter();
@@ -21,10 +21,7 @@ const onLogin = () => {
 
   const rucNormalized = ruc.value.trim().toLowerCase();
 
-  // 1) Empresas registradas vía Sign-up (localStorage)
-  const localCompanies = getCompany();
-
-  // 2) Empresas "seed" del archivo src/data/company.js como fallback demo
+  const localCompanies = getCompanies();
   const allCompanies = [...localCompanies, ...companiesSeed];
 
   const found = allCompanies.find(
