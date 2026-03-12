@@ -21,8 +21,17 @@ const onLogin = () => {
 
   const rucNormalized = ruc.value.trim().toLowerCase();
 
-  const localCompanies = getCompanies();
-  const allCompanies = [...localCompanies, ...companiesSeed];
+  // 🔹 obtener empresas locales de forma segura
+  const localCompaniesRaw = getCompanies();
+  const localCompanies = Array.isArray(localCompaniesRaw)
+    ? localCompaniesRaw
+    : [];
+
+  // 🔹 asegurar que companiesSeed también sea array
+  const seedCompanies = Array.isArray(companiesSeed) ? companiesSeed : [];
+
+  // 🔹 combinar listas
+  const allCompanies = [...localCompanies, ...seedCompanies];
 
   const found = allCompanies.find(
     (c) => (c.ruc || '').trim().toLowerCase() === rucNormalized,
@@ -39,6 +48,7 @@ const onLogin = () => {
   }
 
   login(found);
+
   router.push({ name: 'HomeCompanies' });
 };
 </script>

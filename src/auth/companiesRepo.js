@@ -1,47 +1,39 @@
-const STORAGE_KEY = 'al-toque-session-company'; // ← DIFERENTE a session_companies.js
+const STORAGE_KEY = 'al-toque-companies';
 
-function safeParse(json) {
+/**
+ * Obtener empresas del localStorage
+ */
+export function getCompanies() {
   try {
-    return JSON.parse(json);
-  } catch {
-    return null;
+    const data = localStorage.getItem(STORAGE_KEY);
+
+    if (!data) return [];
+
+    const parsed = JSON.parse(data);
+
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.warn('Error leyendo empresas:', error);
+    return [];
   }
 }
 
-export function getCompanies() {
-  return safeParse(localStorage.getItem(STORAGE_KEY)) || [];
+/**
+ * Guardar empresas
+ */
+export function saveCompanies(companies) {
+  if (!Array.isArray(companies)) return;
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(companies));
 }
 
-export function findCompanyByRuc(ruc) {
-  const normalized = String(ruc || '')
-    .trim()
-    .toLowerCase();
-  return (
-    getCompanies().find((u) => u.ruc?.toLowerCase() === normalized) || null
-  );
-}
-
-export function addCompany({ name, ruc, password }) {
+/**
+ * Registrar nueva empresa
+ */
+export function addCompany(company) {
   const companies = getCompanies();
 
-  const normalizedRuc = String(ruc || '')
-    .trim()
-    .toLowerCase();
-  const exists = companies.some((u) => u.ruc?.toLowerCase() === normalizedRuc);
-  if (exists) {
-    throw new Error('Este RUC ya está registrado.');
-  }
+  companies.push(company);
 
-  const newCompany = {
-    id: Date.now(),
-    name: String(name || '').trim(),
-    ruc: normalizedRuc,
-    password: String(password),
-    coupons: [],
-  };
-
-  companies.push(newCompany);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(companies));
-
-  return newCompany;
+  saveCompanies(companies);
 }
