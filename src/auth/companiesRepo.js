@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'al-toque-companies';
+const STORAGE_KEY = 'al-toque-session-company'; // ← DIFERENTE a session_companies.js
 
 function safeParse(json) {
   try {
@@ -8,19 +8,21 @@ function safeParse(json) {
   }
 }
 
-export function getCompany() {
+export function getCompanies() {
   return safeParse(localStorage.getItem(STORAGE_KEY)) || [];
 }
 
-export function findUserByRuc(ruc) {
+export function findCompanyByRuc(ruc) {
   const normalized = String(ruc || '')
     .trim()
     .toLowerCase();
-  return getCompany().find((u) => u.ruc?.toLowerCase() === normalized) || null;
+  return (
+    getCompanies().find((u) => u.ruc?.toLowerCase() === normalized) || null
+  );
 }
 
-export function addUser({ name, ruc, password }) {
-  const companies = getCompany();
+export function addCompany({ name, ruc, password }) {
+  const companies = getCompanies();
 
   const normalizedRuc = String(ruc || '')
     .trim()
@@ -30,7 +32,7 @@ export function addUser({ name, ruc, password }) {
     throw new Error('Este RUC ya está registrado.');
   }
 
-  const newUser = {
+  const newCompany = {
     id: Date.now(),
     name: String(name || '').trim(),
     ruc: normalizedRuc,
@@ -38,8 +40,8 @@ export function addUser({ name, ruc, password }) {
     coupons: [],
   };
 
-  companies.push(newUser);
+  companies.push(newCompany);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(companies));
 
-  return newUser;
+  return newCompany;
 }

@@ -21,6 +21,7 @@ import SignUpCompany from './views/views_companies/Sign-up-companies.vue';
 import HomeCompanies from './views/views_companies/Home-companies.vue';
 
 import { useSession } from './auth/session';
+import { useSessionCompany } from './auth/session_companies';
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -29,31 +30,15 @@ const routes = [
   { path: '/Contact-item', name: 'Contact', component: Contact },
   { path: '/coupon/:id', name: 'CouponsDetails', component: CouponsDetails },
 
-  // NUEVO
+  // USUARIO
   { path: '/Sign-in', name: 'SignIn', component: SignIn },
   { path: '/Sign-up', name: 'SignUp', component: SignUp },
-  {
-    path: '/Sign-in-companies',
-    name: 'SignInCompany',
-    component: SignInCompany,
-  },
-  {
-    path: '/Sign-up-companies',
-    name: 'SignUpCompany',
-    component: SignUpCompany,
-  },
-  {
-    path: '/Home-companies',
-    name: 'HomeCompanies',
-    component: HomeCompanies,
-  },
   {
     path: '/Profile',
     name: 'Profile',
     component: Profile,
     meta: { requiresAuth: true },
   },
-
   {
     path: '/Cart',
     name: 'Cart',
@@ -73,6 +58,24 @@ const routes = [
     meta: { requiresAuth: true },
   },
 
+  // EMPRESA
+  {
+    path: '/Sign-in-companies',
+    name: 'SignInCompany',
+    component: SignInCompany,
+  },
+  {
+    path: '/Sign-up-companies',
+    name: 'SignUpCompany',
+    component: SignUpCompany,
+  },
+  {
+    path: '/Home-companies',
+    name: 'HomeCompanies',
+    component: HomeCompanies,
+    meta: { requiresCompanyAuth: true },
+  },
+
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ];
 
@@ -85,11 +88,22 @@ const router = createRouter({
   },
 });
 
-// Guard simple
+// Guard ÚNICO que maneja ambos tipos de auth
 router.beforeEach((to) => {
-  const { isAuthenticated } = useSession();
-  if (to.meta?.requiresAuth && !isAuthenticated.value) {
-    return { name: 'SignIn' };
+  // Rutas de usuario
+  if (to.meta?.requiresAuth) {
+    const { isAuthenticated } = useSession();
+    if (!isAuthenticated.value) {
+      return { name: 'SignIn' };
+    }
+  }
+
+  // Rutas de empresa
+  if (to.meta?.requiresCompanyAuth) {
+    const { isCompanyAuthenticated } = useSessionCompany();
+    if (!isCompanyAuthenticated.value) {
+      return { name: 'SignInCompany' };
+    }
   }
 });
 

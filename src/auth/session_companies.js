@@ -1,6 +1,6 @@
 import { reactive, computed } from 'vue';
 
-const STORAGE_KEY = 'al-toque-session';
+const STORAGE_KEY = 'al-toque-session-company';
 
 function safeParse(json) {
   try {
@@ -11,42 +11,42 @@ function safeParse(json) {
 }
 
 const initial = safeParse(localStorage.getItem(STORAGE_KEY)) || {
-  companies: null,
+  company: null,
 };
 
 const state = reactive({
-  companies: initial.companies,
+  company: initial.company,
 });
 
-const isAuthenticated = computed(() => !!state.companies);
+const isCompanyAuthenticated = computed(() => !!state.company);
 
 function persist() {
   localStorage.setItem(
     STORAGE_KEY,
     JSON.stringify({
-      companies: state.companies,
+      company: state.company,
     }),
   );
 }
 
-export function useSession() {
-  const login = (companies) => {
-    state.companies = {
-      id: companies.id,
-      name: companies.name,
-      ruc: companies.ruc,
+export function useSessionCompany() {
+  const login = (company) => {
+    state.company = {
+      id: company.id,
+      name: company.name,
+      ruc: company.ruc,
     };
     persist();
   };
 
   const logout = () => {
-    state.companies = null;
+    state.company = null;
     persist();
   };
 
   return {
     state,
-    isAuthenticated,
+    isCompanyAuthenticated,
     login,
     logout,
   };

@@ -5,12 +5,12 @@ import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
-import usersSeed from '@/data/companies.js';
+import companiesSeed from '@/data/company.js';
 import { getCompany } from '@/auth/companiesRepo';
-import { useSession } from '@/auth/session_companies';
+import { useSessionCompany } from '@/auth/session_companies';
 
 const router = useRouter();
-const { login } = useSession();
+const { login } = useSessionCompany();
 
 const ruc = ref('');
 const password = ref('');
@@ -21,14 +21,14 @@ const onLogin = () => {
 
   const rucNormalized = ruc.value.trim().toLowerCase();
 
-  // 1) Usuarios registrados vía Sign-up (localStorage)
-  const localUsers = getCompany();
+  // 1) Empresas registradas vía Sign-up (localStorage)
+  const localCompanies = getCompany();
 
-  // 2) (Opcional) usuarios “seed” del archivo src/data/user.js como fallback demo
-  const allUsers = [...localUsers, ...usersSeed];
+  // 2) Empresas "seed" del archivo src/data/company.js como fallback demo
+  const allCompanies = [...localCompanies, ...companiesSeed];
 
-  const found = allUsers.find(
-    (u) => (u.ruc || '').trim().toLowerCase() === rucNormalized,
+  const found = allCompanies.find(
+    (c) => (c.ruc || '').trim().toLowerCase() === rucNormalized,
   );
 
   if (!found) {
@@ -64,7 +64,7 @@ const onLogin = () => {
 
             <div class="form-group">
               <label>RUC</label>
-              <input v-model="ruc" type="ruc" required autocomplete="ruc" />
+              <input v-model="ruc" type="text" required />
             </div>
 
             <div class="form-group">
@@ -160,9 +160,7 @@ const onLogin = () => {
   color: #333;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-group input {
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid #ddd;
@@ -170,12 +168,10 @@ const onLogin = () => {
   transition: 0.3s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.form-group input:focus {
   outline: none;
   border-color: #325bcd;
-  box-shadow: 0 0 0 3px rgba(66, 174, 26, 0.15);
+  box-shadow: 0 0 0 3px rgba(50, 91, 205, 0.15);
 }
 
 .submit-btn {
@@ -198,40 +194,25 @@ const onLogin = () => {
 .other-btn {
   margin-top: 10px;
   padding: 14px;
-  width: 50%;
   border-radius: 12px;
-  border: none;
-  background-color: #325bcd;
-  color: white;
+  border: 2px solid #325bcd;
+  background: white;
+  color: #325bcd;
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s ease;
+  width: 100%;
 }
 
 .other-btn:hover {
-  background-color: #2549ad;
+  background-color: #f0f4ff;
   transform: translateY(-2px);
 }
 
 .contact-info {
-  flex: 1;
-  min-width: 250px;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 15px;
-  font-size: 15px;
-}
-
-.contact-info h2 {
-  margin-bottom: 15px;
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .contact-card {
-    flex-direction: column;
-    padding: 40px;
-  }
 }
 </style>

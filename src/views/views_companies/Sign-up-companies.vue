@@ -5,14 +5,14 @@ import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
-import { addUser } from '@/auth/usersRepo';
-import { useSession } from '@/auth/session';
+import { addCompany } from '@/auth/companiesRepo';
+import { useSessionCompany } from '@/auth/session_companies';
 
 const router = useRouter();
-const { login } = useSession();
+const { login } = useSessionCompany();
 
 const name = ref('');
-const email = ref('');
+const ruc = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 const error = ref('');
@@ -21,7 +21,7 @@ const onSignUp = () => {
   error.value = '';
 
   if (!name.value.trim()) {
-    error.value = 'Ingresa tu nombre.';
+    error.value = 'Ingresa el nombre de la empresa.';
     return;
   }
 
@@ -36,18 +36,17 @@ const onSignUp = () => {
   }
 
   try {
-    const user = addUser({
+    const company = addCompany({
       name: name.value,
-      email: email.value,
+      ruc: ruc.value,
       password: password.value,
     });
 
-    // Opcional recomendado: iniciar sesión después de registrar
-    login(user);
+    login(company);
 
-    router.push({ name: 'Profile' });
+    router.push({ name: 'HomeCompanies' });
   } catch (e) {
-    error.value = e?.message || 'No se pudo registrar el usuario.';
+    error.value = e?.message || 'No se pudo registrar la empresa.';
   }
 };
 </script>
@@ -60,7 +59,7 @@ const onSignUp = () => {
 
     <section class="contact-section">
       <div class="contact-container">
-        <h1 class="main-title">Crear cuenta</h1>
+        <h1 class="main-title">Crear cuenta empresa</h1>
 
         <div class="contact-card">
           <form class="form-area" @submit.prevent="onSignUp" autocomplete="on">
@@ -69,17 +68,25 @@ const onSignUp = () => {
             </div>
 
             <div class="form-group">
-              <label>Nombre</label>
-              <input v-model="name" type="text" required autocomplete="name" />
+              <label>Nombre de la empresa</label>
+              <input
+                v-model="name"
+                type="text"
+                required
+                autocomplete="organization"
+              />
             </div>
 
             <div class="form-group">
-              <label>Email</label>
+              <label>RUC</label>
               <input
-                v-model="email"
-                type="email"
+                v-model="ruc"
+                type="text"
+                inputmode="numeric"
+                maxlength="11"
                 required
-                autocomplete="email"
+                autocomplete="off"
+                placeholder="Ej: 20512345678"
               />
             </div>
 
@@ -108,7 +115,7 @@ const onSignUp = () => {
             <button type="submit" class="submit-btn">Registrarme</button>
 
             <router-link
-              to="/Sign-in"
+              to="/Sign-in-companies"
               class="text-navbar"
               style="margin-top: 10px"
             >
@@ -126,7 +133,6 @@ const onSignUp = () => {
 </template>
 
 <style scoped>
-/* puedes dejar tu CSS igual */
 .page-wrapper {
   display: flex;
   flex-direction: column;
