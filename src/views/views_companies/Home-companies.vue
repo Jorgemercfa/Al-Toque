@@ -35,7 +35,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 
         <!-- Tarjetas de acciones rápidas -->
         <div class="quick-actions">
-          <router-link to="/Create-coupon" class="action-card create-card">
+          <router-link to="/Create-Coupons" class="action-card create-card">
             <div class="action-icon">
               <i class="pi pi-plus-circle"></i>
             </div>
@@ -109,8 +109,8 @@ const today = new Date().toLocaleDateString('es-PE', {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #0d1117;
-  color: #e0e0e0;
+  background-color: #ffffff;
+  /* color: #e0e0e0; */
   font-family: Outfit, Inter, Avenir, Helvetica, Arial, sans-serif;
 }
 
@@ -133,12 +133,11 @@ const today = new Date().toLocaleDateString('es-PE', {
 .welcome-title {
   font-size: 2.4rem;
   font-weight: 700;
-  color: #ffffff;
   margin-bottom: 8px;
 }
 
 .company-highlight {
-  color: #4fc3f7;
+  color: #325bcd;
 }
 
 .welcome-date {
@@ -156,7 +155,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 }
 
 .action-card {
-  background: #161b22;
+  background: #325bcd;
   border: 1px solid #30363d;
   border-radius: 16px;
   padding: 32px 28px;
@@ -209,7 +208,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 
 .action-card p {
   font-size: 0.9rem;
-  color: #888;
+  color: #ffffff;
   line-height: 1.5;
 }
 
@@ -222,7 +221,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 
 .info-card,
 .tips-card {
-  background: #161b22;
+  background: #325bcd;
   border: 1px solid #30363d;
   border-radius: 16px;
   padding: 32px;
@@ -240,7 +239,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 }
 
 .info-title .pi {
-  color: #4fc3f7;
+  color: #ffffff;
 }
 
 .tips-title .pi {
@@ -249,7 +248,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 
 .info-text {
   font-size: 0.95rem;
-  color: #aaa;
+  color: #ffffff;
   line-height: 1.8;
 }
 
@@ -264,7 +263,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 
 .tips-list li {
   font-size: 0.93rem;
-  color: #aaa;
+  color: #ffffff;
   line-height: 1.6;
   padding-left: 20px;
   position: relative;

@@ -19,6 +19,7 @@ import OrderConfirmation from './views/OrderConfirmation-item.vue';
 import SignInCompany from './views/views_companies/Sign-in-companies.vue';
 import SignUpCompany from './views/views_companies/Sign-up-companies.vue';
 import HomeCompanies from './views/views_companies/Home-companies.vue';
+import CreateCoupons from './views/views_companies/Create-coupon-item.vue';
 
 import { useSession } from './auth/session';
 import { useSessionCompany } from './auth/session_companies';
@@ -73,6 +74,12 @@ const routes = [
     path: '/Home-companies',
     name: 'HomeCompanies',
     component: HomeCompanies,
+    meta: { requiresCompanyAuth: true },
+  },
+  {
+    path: '/Create-Coupons',
+    name: 'CreateCoupons',
+    component: CreateCoupons,
     meta: { requiresCompanyAuth: true },
   },
 

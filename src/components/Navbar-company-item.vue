@@ -23,7 +23,7 @@
       </router-link>
       <router-link
         @click="closeMenu"
-        to="/Create-coupon"
+        to="/Create-Coupons"
         class="text-navbar-company"
       >
         Crear Cupón
@@ -51,7 +51,7 @@ const closeMenu = () => (menuOpen.value = false);
 
 <style scoped>
 .navbar-company {
-  background: linear-gradient(90deg, #1a1a2e, #16213e);
+  background: linear-gradient(90deg, #325bcd, #325bcd);
   height: 70px;
   display: flex;
   justify-content: space-between;
