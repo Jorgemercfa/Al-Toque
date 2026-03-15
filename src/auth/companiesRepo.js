@@ -27,13 +27,44 @@ export function saveCompanies(companies) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(companies));
 }
 
+function nextCompanyId(companies) {
+  const maxId = companies.reduce(
+    (max, company) => (company?.id > max ? company.id : max),
+    0,
+  );
+
+  return maxId + 1;
+}
+
 /**
  * Registrar nueva empresa
  */
-export function addCompany(company) {
+export function addCompany(companyInput) {
   const companies = getCompanies();
 
-  companies.push(company);
+  const normalizedRuc = (companyInput?.ruc || '').trim();
 
+  if (!normalizedRuc) {
+    throw new Error('Debes ingresar un RUC válido.');
+  }
+
+  const exists = companies.some(
+    (company) => (company?.ruc || '').trim() === normalizedRuc,
+  );
+
+  if (exists) {
+    throw new Error('Ya existe una empresa registrada con ese RUC.');
+  }
+
+  const company = {
+    id: nextCompanyId(companies),
+    name: companyInput?.name || '',
+    ruc: normalizedRuc,
+    password: companyInput?.password || '',
+  };
+
+  companies.push(company);
   saveCompanies(companies);
+
+  return company;
 }

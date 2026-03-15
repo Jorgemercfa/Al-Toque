@@ -4,50 +4,105 @@ import { useRouter } from 'vue-router';
 
 import NavbarCompanies from '@/components/Navbar-company-item.vue';
 import Footer from '@/components/Footer-item.vue';
-
-import { addCompany } from '@/auth/companiesRepo';
 import { useSessionCompany } from '@/auth/session_companies';
+import { addCompanyCoupon } from '@/auth/companyCouponsRepo';
 
 const router = useRouter();
-const { login } = useSessionCompany();
+const { state } = useSessionCompany();
 
 const name = ref('');
-const ruc = ref('');
-const password = ref('');
-const confirmPassword = ref('');
+const shortDescription = ref('');
+const longDescription = ref('');
+const category = ref('Restaurantes');
+const percentage = ref('');
+const originalPrice = ref('');
+const expirationDate = ref('');
+const termsOfUse = ref('');
+const couponCode = ref('');
 const error = ref('');
+const success = ref('');
 
-const onSignUp = () => {
+const categories = [
+  'Restaurantes',
+  'Entretenimiento',
+  'Tecnología',
+  'Fitness',
+  'Moda',
+  'Salud y Bienestar',
+  'Otros',
+];
+
+const generateCouponCode = () => {
+  const prefix = name.value
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, '')
+    .slice(0, 6);
+
+  const random = Math.floor(1000 + Math.random() * 9000);
+  couponCode.value = `${prefix || 'CUPON'}${random}`;
+};
+
+const toNumber = (value) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : NaN;
+};
+
+const onCreateCoupon = () => {
   error.value = '';
+  success.value = '';
 
-  if (!name.value.trim()) {
-    error.value = 'Ingresa el nombre de la empresa.';
+  if (!state.company) {
+    error.value = 'Tu sesión de empresa no está activa.';
     return;
   }
 
-  if (password.value.length < 6) {
-    error.value = 'La contraseña debe tener al menos 6 caracteres.';
+  if (!name.value.trim() || !shortDescription.value.trim()) {
+    error.value = 'Completa el nombre y la descripción corta.';
     return;
   }
 
-  if (password.value !== confirmPassword.value) {
-    error.value = 'Las contraseñas no coinciden.';
+  const originalPriceNumber = toNumber(originalPrice.value);
+
+  if (!Number.isFinite(originalPriceNumber) || originalPriceNumber <= 0) {
+    error.value = 'Ingresa un precio original válido.';
     return;
   }
 
-  try {
-    const company = addCompany({
-      name: name.value,
-      ruc: ruc.value,
-      password: password.value,
-    });
-
-    login(company);
-
-    router.push({ name: 'HomeCompanies' });
-  } catch (e) {
-    error.value = e?.message || 'No se pudo registrar la empresa.';
+  if (!couponCode.value.trim()) {
+    generateCouponCode();
   }
+
+  addCompanyCoupon({
+    name: name.value.trim(),
+    shortDescription: shortDescription.value.trim(),
+    longDescription: longDescription.value.trim(),
+    category: category.value,
+    percentage: percentage.value.trim(),
+    original_price: originalPriceNumber,
+    expiration_date: expirationDate.value,
+    Terms_of_use: termsOfUse.value.trim(),
+    coupon_code: couponCode.value.trim().toUpperCase(),
+    companyId: state.company.id,
+    companyName: state.company.name,
+    companyRuc: state.company.ruc,
+  });
+
+  success.value = 'Cupón creado correctamente.';
+
+  name.value = '';
+  shortDescription.value = '';
+  longDescription.value = '';
+  category.value = 'Restaurantes';
+  percentage.value = '';
+  originalPrice.value = '';
+  expirationDate.value = '';
+  termsOfUse.value = '';
+  couponCode.value = '';
+
+  setTimeout(() => {
+    router.push({ name: 'CompanyCoupons' });
+  }, 500);
 };
 </script>
 
@@ -62,64 +117,63 @@ const onSignUp = () => {
         <h1 class="main-title">Crear Cupones</h1>
 
         <div class="contact-card">
-          <form class="form-area" @submit.prevent="onSignUp" autocomplete="on">
-            <div v-if="error" style="color: #b00020; font-weight: 600">
-              {{ error }}
-            </div>
+          <form class="form-area" @submit.prevent="onCreateCoupon" autocomplete="on">
+            <div v-if="error" class="message error">{{ error }}</div>
+            <div v-if="success" class="message success">{{ success }}</div>
 
             <div class="form-group">
-              <label>Nombre de la empresa</label>
-              <input
-                v-model="name"
-                type="text"
-                required
-                autocomplete="Nombre de la empresa"
-              />
+              <label>Nombre del cupón</label>
+              <input v-model="name" type="text" required placeholder="Ej: Combo parrillero" />
             </div>
+
             <div class="form-group">
               <label>Descripción corta</label>
-              <input
-                v-model="shortDescription"
-                type="text"
-                required
-                autocomplete="Descrioción corta"
-              />
-            </div>
-            <div class="form-group">
-              <label>Descripción Larga</label>
-              <input
-                v-model="longDescription"
-                type="text"
-                required
-                autocomplete="Descrioción larga"
-              />
+              <input v-model="shortDescription" type="text" required />
             </div>
 
             <div class="form-group">
-              <label>Pocentaje</label>
-              <input
-                v-model="percentage"
-                type="text"
-                inputmode="numeric"
-                required
-                autocomplete="off"
-                placeholder="Ej: 20%"
-              />
+              <label>Descripción larga</label>
+              <textarea v-model="longDescription" rows="3" />
             </div>
+
+            <div class="form-group">
+              <label>Categoría</label>
+              <select v-model="category">
+                <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Porcentaje / Beneficio</label>
+              <input v-model="percentage" type="text" placeholder="Ej: 20% o 2x1" required />
+            </div>
+
             <div class="form-group">
               <label>Precio Original</label>
-              <input
-                v-model="originalPrice"
-                type="text"
-                inputmode="numeric"
-                maxlength="11"
-                required
-                autocomplete="off"
-                placeholder="Ej: 205"
-              />
+              <input v-model="originalPrice" type="number" min="1" required />
             </div>
 
-            <button type="submit" class="submit-btn">Crear Cupon</button>
+            <div class="form-group">
+              <label>Fecha de vencimiento</label>
+              <input v-model="expirationDate" type="date" required />
+            </div>
+
+            <div class="form-group">
+              <label>Términos de uso</label>
+              <textarea v-model="termsOfUse" rows="2" />
+            </div>
+
+            <div class="code-row">
+              <div class="form-group code-input">
+                <label>Código del cupón</label>
+                <input v-model="couponCode" type="text" placeholder="Se puede autogenerar" />
+              </div>
+              <button type="button" class="secondary-btn" @click="generateCouponCode">
+                Generar código
+              </button>
+            </div>
+
+            <button type="submit" class="submit-btn">Crear Cupón</button>
           </form>
         </div>
       </div>
@@ -171,7 +225,7 @@ const onSignUp = () => {
   display: flex;
   gap: 60px;
   background: white;
-  padding: 60px;
+  padding: 40px;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
   flex-wrap: wrap;
@@ -182,7 +236,7 @@ const onSignUp = () => {
   min-width: 300px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .form-group {
@@ -196,32 +250,78 @@ const onSignUp = () => {
   color: #333;
 }
 
-.form-group input {
+.form-group input,
+.form-group textarea,
+.form-group select {
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid #ddd;
   font-size: 14px;
   transition: 0.3s ease;
+  font-family: inherit;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
   outline: none;
   border-color: #325bcd;
+}
+
+.code-row {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+}
+
+.code-input {
+  flex: 1;
+}
+
+.submit-btn,
+.secondary-btn {
+  border: none;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .submit-btn {
   background-color: #325bcd;
   color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .submit-btn:hover {
   background-color: #2549ad;
-  transform: translateY(-2px);
+}
+
+.secondary-btn {
+  background-color: #e8ecff;
+  color: #325bcd;
+}
+
+.secondary-btn:hover {
+  background-color: #d8e0ff;
+}
+
+.message {
+  font-weight: 600;
+}
+
+.message.error {
+  color: #b00020;
+}
+
+.message.success {
+  color: #177245;
+}
+
+@media (max-width: 700px) {
+  .code-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 </style>
