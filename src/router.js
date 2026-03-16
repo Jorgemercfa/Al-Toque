@@ -9,6 +9,7 @@ import CouponsDetails from './components/Component-coupons-item.vue';
 // NUEVO
 import SignIn from './views/Sign-in.vue';
 import SignUp from './views/Sign-up.vue';
+import ForgetPassword from './views/Forget-Password.vue';
 import Profile from './views/Profile-item.vue';
 
 import Cart from './views/Cart-item.vue';
@@ -18,6 +19,7 @@ import OrderConfirmation from './views/OrderConfirmation-item.vue';
 // EMPRESA
 import SignInCompany from './views/views_companies/Sign-in-companies.vue';
 import SignUpCompany from './views/views_companies/Sign-up-companies.vue';
+import ForgetPasswordCompany from './views/views_companies/Forget-password-companies.vue';
 import HomeCompanies from './views/views_companies/Home-companies.vue';
 import CreateCoupons from './views/views_companies/Create-coupon-item.vue';
 import CompanyCoupons from './views/views_companies/Company-coupons-item.vue';
@@ -35,6 +37,11 @@ const routes = [
   // USUARIO
   { path: '/Sign-in', name: 'SignIn', component: SignIn },
   { path: '/Sign-up', name: 'SignUp', component: SignUp },
+  {
+    path: '/Forget-Password',
+    name: 'ForgetPassword',
+    component: ForgetPassword,
+  },
   {
     path: '/Profile',
     name: 'Profile',
@@ -70,6 +77,11 @@ const routes = [
     path: '/Sign-up-companies',
     name: 'SignUpCompany',
     component: SignUpCompany,
+  },
+  {
+    path: '/Forget-Password-Companies',
+    name: 'ForgetPasswordCompany',
+    component: ForgetPasswordCompany,
   },
   {
     path: '/Home-companies',

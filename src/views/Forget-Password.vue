@@ -5,44 +5,43 @@ import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
-import usersSeed from '@/data/user.js';
-import { getUsers } from '@/auth/usersRepo';
+import { addUser } from '@/auth/usersRepo';
 import { useSession } from '@/auth/session';
 
 const router = useRouter();
 const { login } = useSession();
-
 const email = ref('');
 const password = ref('');
+const confirmPassword = ref('');
 const error = ref('');
 
-const onLogin = () => {
+const onSignUp = () => {
   error.value = '';
 
-  const emailNormalized = email.value.trim().toLowerCase();
-
-  // 1) Usuarios registrados vía Sign-up (localStorage)
-  const localUsers = getUsers();
-
-  // 2) (Opcional) usuarios “seed” del archivo src/data/user.js como fallback demo
-  const allUsers = [...localUsers, ...usersSeed];
-
-  const found = allUsers.find(
-    (u) => (u.email || '').trim().toLowerCase() === emailNormalized,
-  );
-
-  if (!found) {
-    error.value = 'El correo no está registrado.';
+  if (password.value.length < 6) {
+    error.value = 'La contraseña debe tener al menos 6 caracteres.';
     return;
   }
 
-  if (found.password !== password.value) {
-    error.value = 'Contraseña incorrecta.';
+  if (password.value !== confirmPassword.value) {
+    error.value = 'Las contraseñas no coinciden.';
     return;
   }
 
-  login(found);
-  router.push({ name: 'Home' });
+  try {
+    const user = addUser({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    });
+
+    // Opcional recomendado: iniciar sesión después de registrar
+    login(user);
+
+    router.push({ name: 'Profile' });
+  } catch (e) {
+    error.value = e?.message || 'No se pudo registrar el usuario.';
+  }
 };
 </script>
 
@@ -54,10 +53,10 @@ const onLogin = () => {
 
     <section class="contact-section">
       <div class="contact-container">
-        <h1 class="main-title">Iniciar Sesión</h1>
+        <h1 class="main-title">Olvide COntraseña</h1>
 
         <div class="contact-card">
-          <form class="form-area" @submit.prevent="onLogin" autocomplete="on">
+          <form class="form-area" @submit.prevent="onSignUp" autocomplete="on">
             <div v-if="error" style="color: #b00020; font-weight: 600">
               {{ error }}
             </div>
@@ -73,29 +72,39 @@ const onLogin = () => {
             </div>
 
             <div class="form-group">
-              <label>Contraseña</label>
+              <label>Nueva Contraseña</label>
               <input
                 v-model="password"
                 type="password"
                 required
-                autocomplete="current-password"
+                minlength="6"
+                autocomplete="new-password"
               />
             </div>
 
-            <button type="submit" class="submit-btn">Iniciar sesión</button>
-          </form>
+            <div class="form-group">
+              <label>Confirmar Nueva Contraseña</label>
+              <input
+                v-model="confirmPassword"
+                type="password"
+                required
+                minlength="6"
+                autocomplete="new-password"
+              />
+            </div>
 
-          <div class="contact-info">
-            <router-link to="/Sign-up">
-              <button class="other-btn" type="button">Registrar usuario</button>
+            <button type="submit" class="submit-btn">
+              Restablecer Contraseña
+            </button>
+
+            <router-link
+              to="/Sign-in"
+              class="text-navbar"
+              style="margin-top: 10px"
+            >
+              ¿Ya tienes cuenta? Inicia sesión
             </router-link>
-            <router-link to="/Forget-Password">
-              <button class="other-btn" type="button">Olvide Contraseña</button>
-            </router-link>
-            <router-link to="/Sign-in-companies">
-              <button class="other-btn" type="button">Empresas</button>
-            </router-link>
-          </div>
+          </form>
         </div>
       </div>
     </section>
@@ -107,6 +116,7 @@ const onLogin = () => {
 </template>
 
 <style scoped>
+/* puedes dejar tu CSS igual */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -171,9 +181,7 @@ const onLogin = () => {
   color: #333;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-group input {
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid #ddd;
@@ -181,68 +189,24 @@ const onLogin = () => {
   transition: 0.3s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.form-group input:focus {
   outline: none;
   border-color: #325bcd;
-  box-shadow: 0 0 0 3px rgba(66, 174, 26, 0.15);
 }
 
 .submit-btn {
-  margin-top: 10px;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
   background-color: #325bcd;
   color: white;
-  font-weight: 600;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .submit-btn:hover {
   background-color: #2549ad;
   transform: translateY(-2px);
-}
-
-.other-btn {
-  margin-top: 10px;
-  padding: 14px;
-  width: 50%;
-  border-radius: 12px;
-  border: none;
-  background-color: #325bcd;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.other-btn:hover {
-  background-color: #2549ad;
-  transform: translateY(-2px);
-}
-
-.contact-info {
-  flex: 1;
-  min-width: 250px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 15px;
-  font-size: 15px;
-}
-
-.contact-info h2 {
-  margin-bottom: 15px;
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .contact-card {
-    flex-direction: column;
-    padding: 40px;
-  }
 }
 </style>

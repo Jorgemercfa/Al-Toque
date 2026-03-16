@@ -5,8 +5,7 @@ import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
-import companiesSeed from '@/data/company.js';
-import { getCompanies } from '@/auth/companiesRepo';
+import { addCompany } from '@/auth/companiesRepo';
 import { useSessionCompany } from '@/auth/session_companies';
 
 const router = useRouter();
@@ -14,42 +13,35 @@ const { login } = useSessionCompany();
 
 const ruc = ref('');
 const password = ref('');
+const confirmPassword = ref('');
 const error = ref('');
 
-const onLogin = () => {
+const onSignUp = () => {
   error.value = '';
 
-  const rucNormalized = ruc.value.trim().toLowerCase();
-
-  // 🔹 obtener empresas locales de forma segura
-  const localCompaniesRaw = getCompanies();
-  const localCompanies = Array.isArray(localCompaniesRaw)
-    ? localCompaniesRaw
-    : [];
-
-  // 🔹 asegurar que companiesSeed también sea array
-  const seedCompanies = Array.isArray(companiesSeed) ? companiesSeed : [];
-
-  // 🔹 combinar listas
-  const allCompanies = [...localCompanies, ...seedCompanies];
-
-  const found = allCompanies.find(
-    (c) => (c.ruc || '').trim().toLowerCase() === rucNormalized,
-  );
-
-  if (!found) {
-    error.value = 'El RUC no está registrado.';
+  if (password.value.length < 6) {
+    error.value = 'La contraseña debe tener al menos 6 caracteres.';
     return;
   }
 
-  if (found.password !== password.value) {
-    error.value = 'Contraseña incorrecta.';
+  if (password.value !== confirmPassword.value) {
+    error.value = 'Las contraseñas no coinciden.';
     return;
   }
 
-  login(found);
+  try {
+    const company = addCompany({
+      name: name.value,
+      ruc: ruc.value,
+      password: password.value,
+    });
 
-  router.push({ name: 'HomeCompanies' });
+    login(company);
+
+    router.push({ name: 'HomeCompanies' });
+  } catch (e) {
+    error.value = e?.message || 'No se pudo registrar la empresa.';
+  }
 };
 </script>
 
@@ -61,42 +53,61 @@ const onLogin = () => {
 
     <section class="contact-section">
       <div class="contact-container">
-        <h1 class="main-title">Iniciar Sesión Empresas</h1>
+        <h1 class="main-title">Olvide Contraseña Empresas</h1>
 
         <div class="contact-card">
-          <form class="form-area" @submit.prevent="onLogin" autocomplete="on">
+          <form class="form-area" @submit.prevent="onSignUp" autocomplete="on">
             <div v-if="error" style="color: #b00020; font-weight: 600">
               {{ error }}
             </div>
 
             <div class="form-group">
               <label>RUC</label>
-              <input v-model="ruc" type="text" required />
+              <input
+                v-model="ruc"
+                type="text"
+                inputmode="numeric"
+                maxlength="11"
+                required
+                autocomplete="off"
+                placeholder="Ej: 20512345678"
+              />
             </div>
 
             <div class="form-group">
-              <label>Contraseña</label>
+              <label>Nueva Contraseña</label>
               <input
                 v-model="password"
                 type="password"
                 required
-                autocomplete="current-password"
+                minlength="6"
+                autocomplete="new-password"
               />
             </div>
 
-            <button type="submit" class="submit-btn">Iniciar sesión</button>
-          </form>
+            <div class="form-group">
+              <label>Confirmar Nueva Contraseña</label>
+              <input
+                v-model="confirmPassword"
+                type="password"
+                required
+                minlength="6"
+                autocomplete="new-password"
+              />
+            </div>
 
-          <div class="contact-info">
-            <router-link to="/Sign-up-companies">
-              <button class="other-btn" type="button">Registrar empresa</button>
+            <button type="submit" class="submit-btn">
+              Restablecer Contraseña
+            </button>
+
+            <router-link
+              to="/Sign-in-companies"
+              class="text-navbar"
+              style="margin-top: 10px"
+            >
+              ¿Ya tienes cuenta? Inicia sesión
             </router-link>
-            <router-link to="/Forget-Password-Companies">
-              <button class="other-btn" type="button">
-                Olvide Contraseña empresas
-              </button>
-            </router-link>
-          </div>
+          </form>
         </div>
       </div>
     </section>
@@ -183,48 +194,21 @@ const onLogin = () => {
 .form-group input:focus {
   outline: none;
   border-color: #325bcd;
-  box-shadow: 0 0 0 3px rgba(50, 91, 205, 0.15);
 }
 
 .submit-btn {
-  margin-top: 10px;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
   background-color: #325bcd;
   color: white;
-  font-weight: 600;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .submit-btn:hover {
   background-color: #2549ad;
   transform: translateY(-2px);
-}
-
-.other-btn {
-  margin-top: 10px;
-  padding: 14px;
-  border-radius: 12px;
-  border: 2px solid #325bcd;
-  background: white;
-  color: #325bcd;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
-  width: 100%;
-}
-
-.other-btn:hover {
-  background-color: #f0f4ff;
-  transform: translateY(-2px);
-}
-
-.contact-info {
-  min-width: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 </style>
