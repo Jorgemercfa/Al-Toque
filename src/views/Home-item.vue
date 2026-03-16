@@ -343,7 +343,6 @@ const scrollRestaurantsRight = () => scrollRestaurantsBy(1);
 .our-coupons-wrapper {
   position: relative;
   width: 100%;
-  background: linear-gradient(135deg, #325bcd, #2549ad);
   padding: 40px 60px;
 }
 
@@ -395,7 +394,7 @@ const scrollRestaurantsRight = () => scrollRestaurantsBy(1);
 .logs-item {
   scroll-snap-align: start;
   flex: 0 0 220px;
-  min-height: 240px;
+  min-height: 300px;
   position: relative;
   background: #1f1f1f;
   border-radius: 12px;
@@ -467,7 +466,7 @@ const scrollRestaurantsRight = () => scrollRestaurantsBy(1);
 .our-customers {
   overflow: hidden;
   background: linear-gradient(135deg, #325bcd, #2549ad);
-  padding: 80px 0;
+  padding: 50px 0;
   position: relative;
 }
 
