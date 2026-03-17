@@ -1,5 +1,5 @@
 import { reactive, computed } from 'vue';
-import coupons from '@/data/coupon.js';
+import { getCompanyCoupons } from '@/auth/companyCouponsRepo';
 import { useSession } from '@/auth/session';
 
 const STORAGE_KEY = 'al-toque-cart';
@@ -31,6 +31,7 @@ function persist() {
 
 export function useCart() {
   const { state: sessionState } = useSession();
+  const coupons = computed(() => getCompanyCoupons());
 
   function addToCart(couponId) {
     const existing = state.items.find((i) => i.couponId === couponId);
@@ -66,7 +67,7 @@ export function useCart() {
   const cartItems = computed(() =>
     state.items
       .map((item) => {
-        const coupon = coupons.find((c) => c.id === item.couponId);
+        const coupon = coupons.value.find((c) => c.id === item.couponId);
         if (!coupon) return null;
         return { ...coupon, quantity: item.quantity };
       })

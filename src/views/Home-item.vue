@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import coupons from '@/data/coupon.js';
+import { getCompanyCoupons } from '@/auth/companyCouponsRepo';
 
 /* =============================
    CARRUSEL PRINCIPAL
@@ -84,8 +84,10 @@ const scrollCouponsRight = () => scrollCouponsBy(1);
 /* =============================
    FILTRO: SOLO RESTAURANTES
 ============================= */
+const coupons = computed(() => getCompanyCoupons());
+
 const restaurantCoupons = computed(() =>
-  coupons.filter((c) => c.category === 'Restaurantes'),
+  coupons.value.filter((c) => c.category === 'Restaurantes'),
 );
 
 /* =============================

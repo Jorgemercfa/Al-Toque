@@ -2,9 +2,11 @@
 import navbar from '@/components/Navbar-item.vue'
 import Footer from '@/components/Footer-item.vue'
 import { useRouter } from 'vue-router'
-import coupons from '@/data/coupon.js'
+import { computed } from 'vue';
+import { getCompanyCoupons } from '@/auth/companyCouponsRepo';
 
 const router = useRouter()
+const coupons = computed(() => getCompanyCoupons())
 </script>
 
 <template>

@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
-import coupons from '@/data/coupon.js';
+import { getCompanyCoupons } from '@/auth/companyCouponsRepo';
 import { useCart } from '@/store/cart.js';
 import { useSession } from '@/auth/session';
 
@@ -13,8 +13,10 @@ const router = useRouter();
 const { addToCart } = useCart();
 const { isAuthenticated } = useSession();
 
+const coupons = computed(() => getCompanyCoupons());
+
 const coupon = computed(() =>
-  coupons.find((s) => s.id === Number(route.params.id)),
+  coupons.value.find((s) => s.id === Number(route.params.id)),
 );
 
 const addedFeedback = ref(false);

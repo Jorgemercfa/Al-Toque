@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
-import usersSeed from '@/data/user.js';
 import { getUsers } from '@/auth/usersRepo';
 import { useSession } from '@/auth/session';
 
@@ -24,8 +23,7 @@ const onLogin = () => {
   // 1) Usuarios registrados vía Sign-up (localStorage)
   const localUsers = getUsers();
 
-  // 2) (Opcional) usuarios “seed” del archivo src/data/user.js como fallback demo
-  const allUsers = [...localUsers, ...usersSeed];
+  const allUsers = localUsers;
 
   const found = allUsers.find(
     (u) => (u.email || '').trim().toLowerCase() === emailNormalized,

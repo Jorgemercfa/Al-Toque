@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 
-import companiesSeed from '@/data/company.js';
 import { getCompanies } from '@/auth/companiesRepo';
 import { useSessionCompany } from '@/auth/session_companies';
 
@@ -27,11 +26,7 @@ const onLogin = () => {
     ? localCompaniesRaw
     : [];
 
-  // 🔹 asegurar que companiesSeed también sea array
-  const seedCompanies = Array.isArray(companiesSeed) ? companiesSeed : [];
-
-  // 🔹 combinar listas
-  const allCompanies = [...localCompanies, ...seedCompanies];
+  const allCompanies = localCompanies;
 
   const found = allCompanies.find(
     (c) => (c.ruc || '').trim().toLowerCase() === rucNormalized,
