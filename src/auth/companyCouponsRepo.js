@@ -1,3 +1,5 @@
+import couponsSeed from '@/data/coupon';
+
 const STORAGE_KEY = 'al-toque-company-coupons';
 
 function safeParse(json) {
@@ -13,7 +15,23 @@ function safeParse(json) {
 }
 
 export function getCompanyCoupons() {
-  return safeParse(localStorage.getItem(STORAGE_KEY));
+  const stored = safeParse(localStorage.getItem(STORAGE_KEY));
+
+  if (Array.isArray(stored) && stored.length > 0) {
+    return stored;
+  }
+
+  const normalizedSeed = couponsSeed.map((coupon) => ({
+    ...coupon,
+    companyId: null,
+    companyName: coupon.name || '',
+    companyRuc: null,
+    createdAt: null,
+  }));
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedSeed));
+
+  return normalizedSeed;
 }
 
 export function saveCompanyCoupons(coupons) {

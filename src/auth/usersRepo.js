@@ -1,3 +1,5 @@
+import usersSeed from '@/data/user';
+
 const STORAGE_KEY = 'al-toque-users';
 
 function safeParse(json) {
@@ -9,7 +11,15 @@ function safeParse(json) {
 }
 
 export function getUsers() {
-  return safeParse(localStorage.getItem(STORAGE_KEY)) || [];
+  const stored = safeParse(localStorage.getItem(STORAGE_KEY));
+
+  if (Array.isArray(stored)) {
+    return stored;
+  }
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(usersSeed));
+
+  return [...usersSeed];
 }
 
 export function findUserByEmail(email) {

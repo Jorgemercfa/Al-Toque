@@ -1,3 +1,5 @@
+import companiesSeed from '@/data/company';
+
 const STORAGE_KEY = 'al-toque-companies';
 
 /**
@@ -7,11 +9,17 @@ export function getCompanies() {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
 
-    if (!data) return [];
+    if (!data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(companiesSeed));
+      return [...companiesSeed];
+    }
 
     const parsed = JSON.parse(data);
 
-    return Array.isArray(parsed) ? parsed : [];
+    if (Array.isArray(parsed)) return parsed;
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(companiesSeed));
+    return [...companiesSeed];
   } catch (error) {
     console.warn('Error leyendo empresas:', error);
     return [];
