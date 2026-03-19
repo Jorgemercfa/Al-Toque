@@ -59,7 +59,6 @@ const routes = [
     path: '/Checkout',
     name: 'Checkout',
     component: Checkout,
-    meta: { requiresAuth: true },
   },
   {
     path: '/OrderConfirmation',
@@ -137,6 +136,21 @@ router.beforeEach((to) => {
     if (!isCompanyAuthenticated.value) {
       return { name: 'SignInCompany' };
     }
+  }
+
+  // Checkout exclusivo para planes de empresa
+  if (to.name === 'Checkout') {
+    const isPlanFlow = to.query?.flow === 'plan-company';
+
+    if (isPlanFlow) {
+      const { isCompanyAuthenticated } = useSessionCompany();
+      if (!isCompanyAuthenticated.value) {
+        return { name: 'SignInCompany' };
+      }
+      return true;
+    }
+
+    return { name: 'Cart' };
   }
 });
 

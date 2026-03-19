@@ -1,12 +1,32 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
-import { useCart } from '@/store/cart.js';
+import { useSessionCompany } from '@/auth/session_companies';
 
+const route = useRoute();
 const router = useRouter();
-const { cartItems, cartTotal, checkout } = useCart();
+const { isCompanyAuthenticated } = useSessionCompany();
+
+const plans = {
+  basic: {
+    name: 'Plan Básico',
+    description: 'Publicación de cupones y promociones para impulsar tu visibilidad.',
+    price: 49,
+  },
+  premium: {
+    name: 'Plan Premium',
+    description: 'Incluye priorización, analíticas y mayor alcance para tus campañas.',
+    price: 99,
+  },
+};
+
+const isPlanCheckout = computed(
+  () => route.query.flow === 'plan-company' && isCompanyAuthenticated.value,
+);
+const selectedPlan = computed(() => plans[route.query.plan] || null);
+const checkoutAllowed = computed(() => isPlanCheckout.value && !!selectedPlan.value);
 
 const form = ref({
   cardName: '',
@@ -55,10 +75,9 @@ function validate() {
 }
 
 function confirmPayment() {
-  if (!validate()) return;
+  if (!checkoutAllowed.value || !validate()) return;
   submitting.value = true;
   setTimeout(() => {
-    checkout();
     submitting.value = false;
     router.push({ name: 'OrderConfirmation' });
   }, 800);
@@ -75,21 +94,22 @@ function confirmPayment() {
       <div class="checkout-container">
         <h1 class="main-title">Checkout</h1>
 
-        <div class="checkout-layout">
-          <!-- Order summary -->
+        <div v-if="checkoutAllowed" class="checkout-layout">
           <div class="order-summary">
             <h2 class="section-title">Resumen del pedido</h2>
-            <div v-for="item in cartItems" :key="item.id" class="order-row">
-              <span class="order-name">{{ item.name }} <span class="order-qty">x{{ item.quantity }}</span></span>
-              <span class="order-price">S/ {{ (item.discount_price * item.quantity).toFixed(2) }}</span>
+            <div class="order-row">
+              <span class="order-name">{{ selectedPlan.name }}</span>
+              <span class="order-price">S/ {{ selectedPlan.price.toFixed(2) }}</span>
+            </div>
+            <div class="order-row">
+              <span class="order-name">{{ selectedPlan.description }}</span>
             </div>
             <div class="order-total">
               <span>Total</span>
-              <span>S/ {{ cartTotal.toFixed(2) }}</span>
+              <span>S/ {{ selectedPlan.price.toFixed(2) }}</span>
             </div>
           </div>
 
-          <!-- Payment form -->
           <div class="payment-card">
             <h2 class="section-title">Datos de pago</h2>
 
@@ -151,6 +171,17 @@ function confirmPayment() {
               {{ submitting ? 'Procesando...' : 'Confirmar Pago' }}
             </button>
           </div>
+        </div>
+
+        <div v-else class="order-summary">
+          <h2 class="section-title">Checkout no disponible</h2>
+          <p>
+            El checkout solo está habilitado para la compra de planes de empresa desde
+            la vista <strong>Plans-companies-item</strong>.
+          </p>
+          <button class="pay-btn" @click="router.push({ name: 'PlansCompanies' })">
+            Ir a planes
+          </button>
         </div>
       </div>
     </section>

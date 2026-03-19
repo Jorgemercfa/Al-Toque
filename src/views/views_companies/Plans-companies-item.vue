@@ -1,6 +1,19 @@
 <script setup>
+import { useRouter } from 'vue-router';
 import navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
+
+const router = useRouter();
+
+function goToCheckout(planId) {
+  router.push({
+    name: 'Checkout',
+    query: {
+      flow: 'plan-company',
+      plan: planId,
+    },
+  });
+}
 </script>
 
 <template>
@@ -20,7 +33,7 @@ import Footer from '@/components/Footer-item.vue';
             en descuentos y promociones. Es ideal para pequeñas empresas que
             desean aumentar su visibilidad y atraer nuevos clientes.
           </p>
-          <button class="checkout-btn" @click="goToCheckout">
+          <button class="checkout-btn" @click="goToCheckout('basic')">
             Proceder al pago
           </button>
         </div>
@@ -33,7 +46,7 @@ import Footer from '@/components/Footer-item.vue';
             Es perfecto para empresas que buscan maximizar su alcance y obtener
             información detallada sobre el comportamiento de los usuarios.
           </p>
-          <button class="checkout-btn" @click="goToCheckout">
+          <button class="checkout-btn" @click="goToCheckout('premium')">
             Proceder al pago
           </button>
         </div>
@@ -69,14 +82,14 @@ import Footer from '@/components/Footer-item.vue';
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd; /* Línea roja */
+  background-color: #325bcd;
   display: block;
   margin-top: 10px;
   border-radius: 2px;
 }
 
 .plan-card {
-  background-color: #325bcd; /* Azul oscuro como la imagen */
+  background-color: #325bcd;
   color: #f2f2f2;
   padding: 50px;
   align-items: center;
