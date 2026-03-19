@@ -37,7 +37,7 @@
       </router-link>
       <router-link
         @click="closeMenu"
-        to="/Company-profile"
+        to="/Profile-company"
         class="text-navbar-company"
       >
         <i class="pi pi-building"></i>

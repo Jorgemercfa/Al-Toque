@@ -24,6 +24,7 @@ import HomeCompanies from './views/views_companies/Home-companies.vue';
 import PlansCompanies from './views/views_companies/Plans-companies-item.vue';
 import CreateCoupons from './views/views_companies/Create-coupon-item.vue';
 import CompanyCoupons from './views/views_companies/Company-coupons-item.vue';
+import ProfileCompany from './views/views_companies/Profile-company-item.vue';
 
 import { useSession } from './auth/session';
 import { useSessionCompany } from './auth/session_companies';
@@ -105,6 +106,12 @@ const routes = [
     path: '/Company-coupons',
     name: 'CompanyCoupons',
     component: CompanyCoupons,
+    meta: { requiresCompanyAuth: true },
+  },
+  {
+    path: '/Profile-company',
+    name: 'ProfileCompany',
+    component: ProfileCompany,
     meta: { requiresCompanyAuth: true },
   },
 
