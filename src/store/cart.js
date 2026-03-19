@@ -23,10 +23,13 @@ const state = reactive({
 });
 
 function persist() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({
-    items: state.items,
-    purchasedCoupons: state.purchasedCoupons,
-  }));
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({
+      items: state.items,
+      purchasedCoupons: state.purchasedCoupons,
+    }),
+  );
 }
 
 export function useCart() {
@@ -85,16 +88,36 @@ export function useCart() {
     state.items.reduce((sum, item) => sum + item.quantity, 0),
   );
 
-  function checkout() {
+  function claimFreeCoupons() {
     const userId = sessionState.user?.id ?? null;
-    const purchased = cartItems.value.map((item) => ({
-      ...item,
-      purchasedAt: new Date().toISOString(),
-      userId,
-    }));
-    state.purchasedCoupons.push(...purchased);
+    if (!userId) return;
+
+    const purchased = cartItems.value
+      .filter((item) =>
+        !state.purchasedCoupons.some(
+          (owned) => owned.userId === userId && owned.id === item.id,
+        ),
+      )
+      .map((item) => ({
+        ...item,
+        discount_price: 0,
+        original_price: item.original_price ?? item.discount_price,
+        purchasedAt: new Date().toISOString(),
+        userId,
+      }));
+
+    if (purchased.length > 0) {
+      state.purchasedCoupons.push(...purchased);
+    }
+
     clearCart();
     persist();
+  }
+
+  function checkout() {
+    // Checkout de pago eliminado para cupones:
+    // ahora los cupones se adquieren gratis al confirmar desde el carrito.
+    claimFreeCoupons();
   }
 
   function getPurchasedCoupons(userId) {
@@ -110,6 +133,7 @@ export function useCart() {
     updateQuantity,
     clearCart,
     checkout,
+    claimFreeCoupons,
     getPurchasedCoupons,
   };
 }

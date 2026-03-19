@@ -6,15 +6,23 @@ import { useCart } from '@/store/cart.js';
 import { useSession } from '@/auth/session';
 
 const router = useRouter();
-const { cartItems, cartTotal, cartCount, removeFromCart, updateQuantity } = useCart();
+const {
+  cartItems,
+  cartCount,
+  removeFromCart,
+  updateQuantity,
+  claimFreeCoupons,
+} = useCart();
 const { isAuthenticated } = useSession();
 
-function goToCheckout() {
+function claimCoupons() {
   if (!isAuthenticated.value) {
     router.push({ name: 'SignIn' });
     return;
   }
-  router.push({ name: 'Checkout' });
+
+  claimFreeCoupons();
+  router.push({ name: 'Profile' });
 }
 </script>
 
@@ -34,14 +42,14 @@ function goToCheckout() {
               <img :src="item.image" :alt="item.name" class="cart-thumb" />
               <div class="cart-info">
                 <h3 class="item-name">{{ item.name }}</h3>
-                <p class="item-price">S/ {{ item.discount_price.toFixed(2) }}</p>
+                <p class="item-price">Gratis</p>
               </div>
               <div class="cart-controls">
                 <button class="qty-btn" @click="updateQuantity(item.id, item.quantity - 1)">−</button>
                 <span class="qty-value">{{ item.quantity }}</span>
                 <button class="qty-btn" @click="updateQuantity(item.id, item.quantity + 1)">+</button>
               </div>
-              <p class="item-subtotal">S/ {{ (item.discount_price * item.quantity).toFixed(2) }}</p>
+              <p class="item-subtotal">Gratis</p>
               <button class="remove-btn" @click="removeFromCart(item.id)" title="Eliminar">✕</button>
             </div>
           </div>
@@ -49,14 +57,14 @@ function goToCheckout() {
           <div class="cart-summary">
             <h2 class="summary-title">Resumen</h2>
             <div class="summary-row">
-              <span>Subtotal ({{ cartCount }} item{{ cartCount !== 1 ? 's' : '' }})</span>
-              <span>S/ {{ cartTotal.toFixed(2) }}</span>
+              <span>{{ cartCount }} cupón{{ cartCount !== 1 ? 'es' : '' }}</span>
+              <span>Gratis</span>
             </div>
             <div class="summary-total">
               <span>Total</span>
-              <span>S/ {{ cartTotal.toFixed(2) }}</span>
+              <span>Gratis</span>
             </div>
-            <button class="checkout-btn" @click="goToCheckout">Proceder al pago</button>
+            <button class="checkout-btn" @click="claimCoupons">Obtener cupones gratis</button>
           </div>
         </div>
 
@@ -259,55 +267,48 @@ function goToCheckout() {
   background: #325bcd;
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.25s, transform 0.2s;
+  transition: background 0.2s, transform 0.15s;
 }
 
 .checkout-btn:hover {
   background: #2549ad;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
-/* Empty state */
 .empty-state {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+  padding: 60px 20px;
   text-align: center;
-  padding: 80px 20px;
 }
 
 .empty-icon {
-  font-size: 4rem;
-  margin-bottom: 12px;
+  font-size: 2rem;
+  margin: 0 0 8px;
 }
 
 .empty-msg {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   color: #666;
-  margin-bottom: 28px;
+  margin-bottom: 18px;
 }
 
 .browse-btn {
-  padding: 12px 30px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
   background: #325bcd;
   color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.25s, transform 0.2s;
 }
 
 .browse-btn:hover {
   background: #2549ad;
-  transform: translateY(-2px);
-}
-
-@media (max-width: 700px) {
-  .cart-summary {
-    width: 100%;
-  }
 }
 </style>
