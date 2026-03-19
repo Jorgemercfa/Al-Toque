@@ -21,6 +21,7 @@ import SignInCompany from './views/views_companies/Sign-in-companies.vue';
 import SignUpCompany from './views/views_companies/Sign-up-companies.vue';
 import ForgetPasswordCompany from './views/views_companies/Forget-password-companies.vue';
 import HomeCompanies from './views/views_companies/Home-companies.vue';
+import PlansCompanies from './views/views_companies/Plans-companies-item.vue';
 import CreateCoupons from './views/views_companies/Create-coupon-item.vue';
 import CompanyCoupons from './views/views_companies/Company-coupons-item.vue';
 
@@ -87,6 +88,12 @@ const routes = [
     path: '/Home-companies',
     name: 'HomeCompanies',
     component: HomeCompanies,
+    meta: { requiresCompanyAuth: true },
+  },
+  {
+    path: '/Plans-companies-item',
+    name: 'PlansCompanies',
+    component: PlansCompanies,
     meta: { requiresCompanyAuth: true },
   },
   {

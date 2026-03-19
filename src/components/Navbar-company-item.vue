@@ -16,6 +16,13 @@
       </router-link>
       <router-link
         @click="closeMenu"
+        to="/Plans-companies-item"
+        class="text-navbar-company"
+      >
+        Planes
+      </router-link>
+      <router-link
+        @click="closeMenu"
         to="/Company-coupons"
         class="text-navbar-company"
       >
