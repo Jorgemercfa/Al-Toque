@@ -1,11 +1,12 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 import NavbarCompanies from '@/components/Navbar-company-item.vue';
 import Footer from '@/components/Footer-item.vue';
 import { useSessionCompany } from '@/auth/session_companies';
-import { addCompanyCoupon } from '@/auth/companyCouponsRepo';
+import { addCompanyCoupon, getCouponsCreatedThisMonth } from '@/auth/companyCouponsRepo';
+import { getCompanyPlan, getMonthlyCouponLimitForPlan } from '@/auth/companyPlansRepo';
 
 const router = useRouter();
 const { state } = useSessionCompany();
@@ -19,6 +20,7 @@ const originalPrice = ref('');
 const expirationDate = ref('');
 const termsOfUse = ref('');
 const couponCode = ref('');
+const totalCoupons = ref(50);
 const error = ref('');
 const success = ref('');
 
@@ -31,6 +33,11 @@ const categories = [
   'Salud y Bienestar',
   'Otros',
 ];
+
+const companyPlan = computed(() => getCompanyPlan(state.company));
+const monthlyLimit = computed(() => getMonthlyCouponLimitForPlan(companyPlan.value));
+const monthlyCreated = computed(() => getCouponsCreatedThisMonth(state.company).length);
+const monthlyRemaining = computed(() => Math.max(0, monthlyLimit.value - monthlyCreated.value));
 
 const generateCouponCode = () => {
   const prefix = name.value
@@ -48,12 +55,27 @@ const toNumber = (value) => {
   return Number.isFinite(parsed) ? parsed : NaN;
 };
 
+const normalizeCouponQuantity = () => {
+  const parsed = Number(totalCoupons.value);
+  if (!Number.isFinite(parsed)) {
+    totalCoupons.value = 50;
+    return;
+  }
+
+  totalCoupons.value = Math.min(500, Math.max(50, Math.round(parsed)));
+};
+
 const onCreateCoupon = () => {
   error.value = '';
   success.value = '';
 
   if (!state.company) {
     error.value = 'Tu sesión de empresa no está activa.';
+    return;
+  }
+
+  if (monthlyRemaining.value <= 0) {
+    error.value = `Ya alcanzaste el límite de ${monthlyLimit.value} cupones este mes en tu plan.`;
     return;
   }
 
@@ -68,6 +90,8 @@ const onCreateCoupon = () => {
     error.value = 'Ingresa un precio original válido.';
     return;
   }
+
+  normalizeCouponQuantity();
 
   if (!couponCode.value.trim()) {
     generateCouponCode();
@@ -86,6 +110,8 @@ const onCreateCoupon = () => {
     companyId: state.company.id,
     companyName: state.company.name,
     companyRuc: state.company.ruc,
+    monthlyPlan: companyPlan.value,
+    totalCoupons: totalCoupons.value,
   });
 
   success.value = 'Cupón creado correctamente.';
@@ -99,6 +125,7 @@ const onCreateCoupon = () => {
   expirationDate.value = '';
   termsOfUse.value = '';
   couponCode.value = '';
+  totalCoupons.value = 50;
 
   setTimeout(() => {
     router.push({ name: 'CompanyCoupons' });
@@ -115,6 +142,12 @@ const onCreateCoupon = () => {
     <section class="contact-section">
       <div class="contact-container">
         <h1 class="main-title">Crear Cupones</h1>
+
+        <div class="plan-alert">
+          <strong>Plan {{ companyPlan === 'premium' ? 'Premium' : 'Básico' }}:</strong>
+          {{ monthlyCreated }} / {{ monthlyLimit }} cupones creados este mes.
+          <span class="remaining">Disponibles: {{ monthlyRemaining }}</span>
+        </div>
 
         <div class="contact-card">
           <form class="form-area" @submit.prevent="onCreateCoupon" autocomplete="on">
@@ -151,6 +184,29 @@ const onCreateCoupon = () => {
             <div class="form-group">
               <label>Precio Original</label>
               <input v-model="originalPrice" type="number" min="1" required />
+            </div>
+
+            <div class="form-group">
+              <label>Cantidad de cupones para esta oferta (mínimo 50, máximo 500)</label>
+              <div class="quantity-row">
+                <input
+                  v-model.number="totalCoupons"
+                  type="range"
+                  min="50"
+                  max="500"
+                  step="1"
+                  @input="normalizeCouponQuantity"
+                />
+                <input
+                  v-model.number="totalCoupons"
+                  type="number"
+                  min="50"
+                  max="500"
+                  step="1"
+                  class="quantity-input"
+                  @blur="normalizeCouponQuantity"
+                />
+              </div>
             </div>
 
             <div class="form-group">
@@ -207,7 +263,7 @@ const onCreateCoupon = () => {
 .main-title {
   font-size: 42px;
   font-weight: 700;
-  margin-bottom: 50px;
+  margin-bottom: 24px;
   position: relative;
 }
 
@@ -219,6 +275,19 @@ const onCreateCoupon = () => {
   display: block;
   margin-top: 10px;
   border-radius: 2px;
+}
+
+.plan-alert {
+  background: #e8ecff;
+  border-left: 5px solid #325bcd;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 22px;
+}
+
+.remaining {
+  margin-left: 8px;
+  font-weight: 600;
 }
 
 .contact-card {
@@ -266,6 +335,21 @@ const onCreateCoupon = () => {
 .form-group select:focus {
   outline: none;
   border-color: #325bcd;
+}
+
+.quantity-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.quantity-row input[type='range'] {
+  width: 100%;
+  padding: 0;
+}
+
+.quantity-input {
+  max-width: 130px;
 }
 
 .code-row {
@@ -319,9 +403,14 @@ const onCreateCoupon = () => {
 }
 
 @media (max-width: 700px) {
-  .code-row {
+  .code-row,
+  .quantity-row {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .quantity-input {
+    max-width: none;
   }
 }
 </style>

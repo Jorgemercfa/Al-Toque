@@ -4,20 +4,21 @@ import { useRoute, useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
 import { useSessionCompany } from '@/auth/session_companies';
+import { saveCompanyPlan } from '@/auth/companyPlansRepo';
 
 const route = useRoute();
 const router = useRouter();
-const { isCompanyAuthenticated } = useSessionCompany();
+const { isCompanyAuthenticated, state: companyState } = useSessionCompany();
 
 const plans = {
   basic: {
     name: 'Plan Básico',
-    description: 'Publicación de cupones y promociones para impulsar tu visibilidad.',
+    description: 'Hasta 20 cupones por mes + soporte para empresas.',
     price: 49,
   },
   premium: {
     name: 'Plan Premium',
-    description: 'Incluye priorización, analíticas y mayor alcance para tus campañas.',
+    description: 'Hasta 40 cupones por mes + dashboard de estadísticas avanzadas.',
     price: 99,
   },
 };
@@ -79,6 +80,11 @@ function confirmPayment() {
   submitting.value = true;
   setTimeout(() => {
     submitting.value = false;
+
+    if (selectedPlan.value) {
+      saveCompanyPlan(companyState.company, route.query.plan);
+    }
+
     router.push({ name: 'OrderConfirmation' });
   }, 800);
 }
