@@ -61,13 +61,21 @@ const onLogout = () => {
         <div class="coupons-section">
           <h2 class="section-title">Mis cupones adquiridos</h2>
           <div v-if="purchasedCoupons.length > 0" class="coupons-grid">
-            <div v-for="(c, i) in purchasedCoupons" :key="i" class="coupon-card">
+            <div
+              v-for="(c, i) in purchasedCoupons"
+              :key="i"
+              class="coupon-card"
+            >
               <img :src="c.image" :alt="c.name" class="coupon-img" />
               <div class="coupon-body">
                 <h3 class="coupon-name">{{ c.name }}</h3>
                 <div class="coupon-code-box">{{ c.coupon_code }}</div>
-                <p class="coupon-date">Comprado el {{ formatDate(c.purchasedAt) }}</p>
-                <p class="coupon-price">S/ {{ c.discount_price?.toFixed(2) }}</p>
+                <p class="coupon-date">
+                  Comprado el {{ formatDate(c.purchasedAt) }}
+                </p>
+                <p class="coupon-price">
+                  S/ {{ c.discount_price?.toFixed(2) }}
+                </p>
               </div>
             </div>
           </div>
@@ -190,8 +198,7 @@ const onLogout = () => {
 
 .coupons-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
 .coupon-card {
