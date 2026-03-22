@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
 /* =============================
    CLIENTES
 ============================= */
-import c1 from '@/assets/customer-1.jpg';
+import c1 from '@/assets/customer-1.png';
 import c2 from '@/assets/customer-2.png';
 import c3 from '@/assets/customer-3.png';
 import c4 from '@/assets/customer-4.png';
