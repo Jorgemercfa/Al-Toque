@@ -137,7 +137,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 }
 
 .company-highlight {
-  color: #325bcd;
+  color: #ecdd06;
 }
 
 .welcome-date {
@@ -155,7 +155,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 }
 
 .action-card {
-  background: #325bcd;
+  background: #ecdd06;
   border: 1px solid #30363d;
   border-radius: 16px;
   padding: 32px 28px;
@@ -221,7 +221,7 @@ const today = new Date().toLocaleDateString('es-PE', {
 
 .info-card,
 .tips-card {
-  background: #325bcd;
+  background: #ecdd06;
   border: 1px solid #30363d;
   border-radius: 16px;
   padding: 32px;

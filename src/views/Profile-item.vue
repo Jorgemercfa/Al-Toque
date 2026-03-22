@@ -122,7 +122,7 @@ const onLogout = () => {
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   display: block;
   margin-top: 10px;
   border-radius: 2px;
@@ -163,13 +163,13 @@ const onLogout = () => {
   padding: 14px;
   border-radius: 12px;
   border: none;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   color: white;
   font-weight: 600;
   cursor: pointer;
 }
 .submit-btn:hover {
-  background-color: #2549ad;
+  background-color: #ecdd06;
   transform: translateY(-2px);
 }
 
@@ -190,7 +190,7 @@ const onLogout = () => {
   content: '';
   width: 60px;
   height: 3px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   display: block;
   margin-top: 8px;
   border-radius: 2px;
@@ -231,7 +231,7 @@ const onLogout = () => {
 }
 
 .coupon-code-box {
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
   padding: 8px 12px;
   border-radius: 8px;
@@ -252,7 +252,7 @@ const onLogout = () => {
 .coupon-price {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #325bcd;
+  color: #ecdd06;
   margin: 0;
 }
 
@@ -272,7 +272,7 @@ const onLogout = () => {
 
 .browse-btn {
   padding: 12px 28px;
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
   border: none;
   border-radius: 12px;
@@ -283,7 +283,7 @@ const onLogout = () => {
 }
 
 .browse-btn:hover {
-  background: #2549ad;
+  background: #ecdd06;
   transform: translateY(-2px);
 }
 </style>

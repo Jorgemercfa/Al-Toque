@@ -58,7 +58,7 @@ const closeMenu = () => (menuOpen.value = false);
 
 <style scoped>
 .navbar-company {
-  background: linear-gradient(90deg, #325bcd, #325bcd);
+  background: linear-gradient(90deg, #ecdd06, #ecdd06);
   height: 70px;
   display: flex;
   justify-content: space-between;

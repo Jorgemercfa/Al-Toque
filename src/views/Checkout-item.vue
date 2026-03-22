@@ -18,7 +18,8 @@ const plans = {
   },
   premium: {
     name: 'Plan Premium',
-    description: 'Hasta 40 cupones por mes + dashboard de estadísticas avanzadas.',
+    description:
+      'Hasta 40 cupones por mes + dashboard de estadísticas avanzadas.',
     price: 99,
   },
 };
@@ -27,7 +28,9 @@ const isPlanCheckout = computed(
   () => route.query.flow === 'plan-company' && isCompanyAuthenticated.value,
 );
 const selectedPlan = computed(() => plans[route.query.plan] || null);
-const checkoutAllowed = computed(() => isPlanCheckout.value && !!selectedPlan.value);
+const checkoutAllowed = computed(
+  () => isPlanCheckout.value && !!selectedPlan.value,
+);
 
 const form = ref({
   cardName: '',
@@ -54,9 +57,11 @@ function formatExpiry(e) {
 
 function validate() {
   const errs = {};
-  if (!form.value.cardName.trim()) errs.cardName = 'Ingresa el nombre en la tarjeta.';
+  if (!form.value.cardName.trim())
+    errs.cardName = 'Ingresa el nombre en la tarjeta.';
   const digits = form.value.cardNumber.replace(/\s/g, '');
-  if (digits.length !== 16) errs.cardNumber = 'El número de tarjeta debe tener 16 dígitos.';
+  if (digits.length !== 16)
+    errs.cardNumber = 'El número de tarjeta debe tener 16 dígitos.';
   if (!/^\d{2}\/\d{2}$/.test(form.value.expiry)) {
     errs.expiry = 'Formato válido: MM/YY.';
   } else {
@@ -70,7 +75,8 @@ function validate() {
       errs.expiry = 'La tarjeta está vencida.';
     }
   }
-  if (!/^\d{3}$/.test(form.value.cvv)) errs.cvv = 'El CVV debe tener 3 dígitos.';
+  if (!/^\d{3}$/.test(form.value.cvv))
+    errs.cvv = 'El CVV debe tener 3 dígitos.';
   errors.value = errs;
   return Object.keys(errs).length === 0;
 }
@@ -105,7 +111,9 @@ function confirmPayment() {
             <h2 class="section-title">Resumen del pedido</h2>
             <div class="order-row">
               <span class="order-name">{{ selectedPlan.name }}</span>
-              <span class="order-price">S/ {{ selectedPlan.price.toFixed(2) }}</span>
+              <span class="order-price"
+                >S/ {{ selectedPlan.price.toFixed(2) }}</span
+              >
             </div>
             <div class="order-row">
               <span class="order-name">{{ selectedPlan.description }}</span>
@@ -127,7 +135,9 @@ function confirmPayment() {
                 placeholder="Juan García"
                 :class="{ 'input-error': errors.cardName }"
               />
-              <span v-if="errors.cardName" class="error-msg">{{ errors.cardName }}</span>
+              <span v-if="errors.cardName" class="error-msg">{{
+                errors.cardName
+              }}</span>
             </div>
 
             <div class="form-group">
@@ -140,7 +150,9 @@ function confirmPayment() {
                 :class="{ 'input-error': errors.cardNumber }"
                 @input="formatCardNumber"
               />
-              <span v-if="errors.cardNumber" class="error-msg">{{ errors.cardNumber }}</span>
+              <span v-if="errors.cardNumber" class="error-msg">{{
+                errors.cardNumber
+              }}</span>
             </div>
 
             <div class="form-row">
@@ -154,7 +166,9 @@ function confirmPayment() {
                   :class="{ 'input-error': errors.expiry }"
                   @input="formatExpiry"
                 />
-                <span v-if="errors.expiry" class="error-msg">{{ errors.expiry }}</span>
+                <span v-if="errors.expiry" class="error-msg">{{
+                  errors.expiry
+                }}</span>
               </div>
 
               <div class="form-group">
@@ -165,15 +179,25 @@ function confirmPayment() {
                   placeholder="123"
                   maxlength="3"
                   :class="{ 'input-error': errors.cvv }"
-                  @input="form.cvv = form.cvv.replace(/\D/g, '').substring(0, 3)"
+                  @input="
+                    form.cvv = form.cvv.replace(/\D/g, '').substring(0, 3)
+                  "
                 />
-                <span v-if="errors.cvv" class="error-msg">{{ errors.cvv }}</span>
+                <span v-if="errors.cvv" class="error-msg">{{
+                  errors.cvv
+                }}</span>
               </div>
             </div>
 
-            <p class="secure-note">🔒 Pago seguro simulado. No se procesará ningún cargo real.</p>
+            <p class="secure-note">
+              🔒 Pago seguro simulado. No se procesará ningún cargo real.
+            </p>
 
-            <button class="pay-btn" :disabled="submitting" @click="confirmPayment">
+            <button
+              class="pay-btn"
+              :disabled="submitting"
+              @click="confirmPayment"
+            >
               {{ submitting ? 'Procesando...' : 'Confirmar Pago' }}
             </button>
           </div>
@@ -182,10 +206,13 @@ function confirmPayment() {
         <div v-else class="order-summary">
           <h2 class="section-title">Checkout no disponible</h2>
           <p>
-            El checkout solo está habilitado para la compra de planes de empresa desde
-            la vista <strong>Plans-companies-item</strong>.
+            El checkout solo está habilitado para la compra de planes de empresa
+            desde la vista <strong>Plans-companies-item</strong>.
           </p>
-          <button class="pay-btn" @click="router.push({ name: 'PlansCompanies' })">
+          <button
+            class="pay-btn"
+            @click="router.push({ name: 'PlansCompanies' })"
+          >
             Ir a planes
           </button>
         </div>
@@ -229,7 +256,7 @@ function confirmPayment() {
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   display: block;
   margin-top: 10px;
   border-radius: 2px;
@@ -326,7 +353,7 @@ function confirmPayment() {
 }
 
 .form-group input:focus {
-  border-color: #325bcd;
+  border-color: #ecdd06;
 }
 
 .input-error {
@@ -357,7 +384,7 @@ function confirmPayment() {
 .pay-btn {
   width: 100%;
   padding: 14px;
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
   border: none;
   border-radius: 12px;
@@ -368,7 +395,7 @@ function confirmPayment() {
 }
 
 .pay-btn:hover:not(:disabled) {
-  background: #2549ad;
+  background: #ecdd06;
   transform: translateY(-2px);
 }
 

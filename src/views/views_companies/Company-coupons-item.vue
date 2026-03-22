@@ -18,7 +18,9 @@ const redeemMessage = ref('');
 const redeemType = ref('success');
 
 const coupons = computed(() => getCouponsByCompany(state.company));
-const activeCoupons = computed(() => coupons.value.filter((coupon) => isCouponActive(coupon)));
+const activeCoupons = computed(() =>
+  coupons.value.filter((coupon) => isCouponActive(coupon)),
+);
 const stats = computed(() => getCompanyCouponsStats(state.company));
 
 const uniqueCodes = computed(() =>
@@ -70,7 +72,11 @@ const submitRedeem = () => {
           </div>
 
           <div v-else class="coupons-grid">
-            <article v-for="coupon in activeCoupons" :key="coupon.id" class="coupon-card">
+            <article
+              v-for="coupon in activeCoupons"
+              :key="coupon.id"
+              class="coupon-card"
+            >
               <div class="badge">{{ coupon.percentage || 'Oferta' }}</div>
               <h3>{{ coupon.name }}</h3>
               <p class="short">{{ coupon.shortDescription }}</p>
@@ -116,10 +122,16 @@ const submitRedeem = () => {
         <section class="dashboard-block">
           <h2>Canjeo de códigos</h2>
           <div class="redeem-box">
-            <input v-model="redeemCode" type="text" placeholder="Ingresa el código único" />
+            <input
+              v-model="redeemCode"
+              type="text"
+              placeholder="Ingresa el código único"
+            />
             <button @click="submitRedeem">Canjear código</button>
           </div>
-          <p v-if="redeemMessage" :class="['redeem-message', redeemType]">{{ redeemMessage }}</p>
+          <p v-if="redeemMessage" :class="['redeem-message', redeemType]">
+            {{ redeemMessage }}
+          </p>
         </section>
 
         <section class="dashboard-block">
@@ -196,7 +208,7 @@ const submitRedeem = () => {
 .create-link {
   display: inline-block;
   margin-top: 8px;
-  color: #325bcd;
+  color: #ecdd06;
   font-weight: 600;
 }
 
@@ -218,7 +230,7 @@ const submitRedeem = () => {
   position: absolute;
   right: 12px;
   top: 12px;
-  background: #325bcd;
+  background: #ecdd06;
   color: #fff;
   border-radius: 999px;
   padding: 4px 10px;
@@ -270,7 +282,7 @@ const submitRedeem = () => {
   border: none;
   border-radius: 10px;
   padding: 0 16px;
-  background: #325bcd;
+  background: #ecdd06;
   color: #fff;
 }
 
@@ -312,7 +324,7 @@ const submitRedeem = () => {
 }
 
 .support-block strong {
-  color: #325bcd;
+  color: #ecdd06;
 }
 
 @media (max-width: 700px) {

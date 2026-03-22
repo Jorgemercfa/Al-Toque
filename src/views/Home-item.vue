@@ -304,7 +304,7 @@ const scrollRestaurantsRight = () => scrollRestaurantsBy(1);
 }
 
 .carousel-dots .active {
-  background: #325bcd;
+  background: #ecdd06;
   transform: scale(1.2);
 }
 
@@ -331,7 +331,7 @@ const scrollRestaurantsRight = () => scrollRestaurantsBy(1);
   content: '';
   width: 60px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   position: absolute;
   bottom: -12px;
   left: 50%;
@@ -454,7 +454,7 @@ const scrollRestaurantsRight = () => scrollRestaurantsBy(1);
 .our-sector {
   width: 100%;
   height: 300px;
-  background: linear-gradient(135deg, #325bcd, #2549ad);
+  background: linear-gradient(135deg, #ecdd06, #ecdd06);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -467,7 +467,7 @@ const scrollRestaurantsRight = () => scrollRestaurantsBy(1);
 ================================= */
 .our-customers {
   overflow: hidden;
-  background: linear-gradient(135deg, #325bcd, #2549ad);
+  background: linear-gradient(135deg, #ecdd06, #ecdd06);
   padding: 50px 0;
   position: relative;
 }

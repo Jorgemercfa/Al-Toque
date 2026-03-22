@@ -148,7 +148,7 @@ const onSignUp = () => {
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   display: block;
   margin-top: 10px;
   border-radius: 2px;
@@ -193,11 +193,11 @@ const onSignUp = () => {
 
 .form-group input:focus {
   outline: none;
-  border-color: #325bcd;
+  border-color: #ecdd06;
 }
 
 .submit-btn {
-  background-color: #325bcd;
+  background-color: #ecdd06;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -208,7 +208,7 @@ const onSignUp = () => {
 }
 
 .submit-btn:hover {
-  background-color: #2549ad;
+  background-color: #ecdd06;
   transform: translateY(-2px);
 }
 </style>

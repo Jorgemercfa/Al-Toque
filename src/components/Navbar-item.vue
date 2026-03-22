@@ -72,7 +72,7 @@ html {
 }
 
 .navbar-area {
-  background: linear-gradient(90deg, #325bcd, #325bcd);
+  background: linear-gradient(90deg, #ecdd06, #ecdd06);
   height: 70px;
   display: flex;
   justify-content: space-between;
@@ -153,7 +153,7 @@ html {
     left: 0;
     width: 100%;
     flex-direction: column;
-    background: linear-gradient(180deg, #325bcd, #2549ad);
+    background: linear-gradient(180deg, #ecdd06, #ecdd06);
     padding: 25px 0;
     gap: 20px;
     display: none;

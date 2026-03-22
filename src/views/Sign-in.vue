@@ -134,7 +134,7 @@ const onLogin = () => {
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   display: block;
   margin-top: 10px;
   border-radius: 2px;
@@ -183,7 +183,7 @@ const onLogin = () => {
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #325bcd;
+  border-color: #ecdd06;
   box-shadow: 0 0 0 3px rgba(66, 174, 26, 0.15);
 }
 
@@ -192,7 +192,7 @@ const onLogin = () => {
   padding: 14px;
   border-radius: 12px;
   border: none;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -200,7 +200,7 @@ const onLogin = () => {
 }
 
 .submit-btn:hover {
-  background-color: #2549ad;
+  background-color: #ecdd06;
   transform: translateY(-2px);
 }
 
@@ -210,7 +210,7 @@ const onLogin = () => {
   width: 50%;
   border-radius: 12px;
   border: none;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -218,7 +218,7 @@ const onLogin = () => {
 }
 
 .other-btn:hover {
-  background-color: #2549ad;
+  background-color: #ecdd06;
   transform: translateY(-2px);
 }
 

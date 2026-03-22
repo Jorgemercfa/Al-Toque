@@ -112,7 +112,7 @@ import Footer from '@/components/Footer-item.vue';
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   display: block;
   margin-top: 10px;
   border-radius: 2px;
@@ -161,7 +161,7 @@ import Footer from '@/components/Footer-item.vue';
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #325bcd;
+  border-color: #ecdd06;
   box-shadow: 0 0 0 3px rgba(66, 174, 26, 0.15);
 }
 
@@ -170,7 +170,7 @@ import Footer from '@/components/Footer-item.vue';
   padding: 14px;
   border-radius: 12px;
   border: none;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   color: white;
   font-weight: 600;
   cursor: pointer;

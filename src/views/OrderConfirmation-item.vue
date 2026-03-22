@@ -15,7 +15,8 @@ import Footer from '@/components/Footer-item.vue';
           <div class="success-icon">✓</div>
           <h1 class="success-title">¡Compra exitosa!</h1>
           <p class="success-msg">
-            Tu pedido fue procesado correctamente. Puedes ver tus cupones adquiridos en tu perfil.
+            Tu pedido fue procesado correctamente. Puedes ver tus cupones
+            adquiridos en tu perfil.
           </p>
 
           <div class="action-buttons">
@@ -68,7 +69,7 @@ import Footer from '@/components/Footer-item.vue';
 .success-icon {
   width: 80px;
   height: 80px;
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
   border-radius: 50%;
   font-size: 2.5rem;
@@ -101,7 +102,7 @@ import Footer from '@/components/Footer-item.vue';
 
 .primary-btn {
   padding: 13px 28px;
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
   border: none;
   border-radius: 12px;
@@ -112,15 +113,15 @@ import Footer from '@/components/Footer-item.vue';
 }
 
 .primary-btn:hover {
-  background: #2549ad;
+  background: #ecdd06;
   transform: translateY(-2px);
 }
 
 .secondary-btn {
   padding: 13px 28px;
   background: white;
-  color: #325bcd;
-  border: 2px solid #325bcd;
+  color: #ecdd06;
+  border: 2px solid #ecdd06;
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
@@ -129,7 +130,7 @@ import Footer from '@/components/Footer-item.vue';
 }
 
 .secondary-btn:hover {
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
   transform: translateY(-2px);
 }

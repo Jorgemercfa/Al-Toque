@@ -61,14 +61,14 @@ import Footer from '@/components/Footer-item.vue';
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd; /* Línea roja */
+  background-color: #ecdd06; /* Línea roja */
   display: block;
   margin-top: 10px;
   border-radius: 2px;
 }
 
 .about-card {
-  background-color: #325bcd; /* Azul oscuro como la imagen */
+  background-color: #ecdd06; /* Azul oscuro como la imagen */
   color: #f2f2f2;
   padding: 50px;
   border-radius: 20px;

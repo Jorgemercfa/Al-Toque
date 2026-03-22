@@ -55,7 +55,7 @@ const coupons = computed(() => getCompanyCoupons())
   content: "";
   width: 60px;
   height: 4px;
-  background-color: #325BCD;
+  background-color: #ECDD06;
   position: absolute;
   bottom: -10px;
   left: 0;
@@ -73,7 +73,7 @@ const coupons = computed(() => getCompanyCoupons())
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #325BCD, #2549ad);
+  background: linear-gradient(135deg, #ECDD06, #ecdd06);
   color: white;
   border-radius: 14px;
   padding: 24px;

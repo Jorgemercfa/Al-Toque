@@ -28,8 +28,9 @@ function goToCheckout(planId) {
         <div class="plan-card">
           <h2>Básico</h2>
           <p class="plan-text">
-            Incluye publicación de hasta <strong>20 cupones por mes</strong>, sesión de
-            cupones activos, canjeo de códigos y soporte para empresas.
+            Incluye publicación de hasta <strong>20 cupones por mes</strong>,
+            sesión de cupones activos, canjeo de códigos y soporte para
+            empresas.
           </p>
           <ul class="plan-features">
             <li>20 cupones mensuales</li>
@@ -44,8 +45,8 @@ function goToCheckout(planId) {
           <h2>Premium</h2>
           <p class="plan-text">
             Todo lo del básico y capacidad de publicar hasta
-            <strong>40 cupones por mes</strong>, además de dashboard con estadísticas
-            de cupones vendidos y los más vendidos.
+            <strong>40 cupones por mes</strong>, además de dashboard con
+            estadísticas de cupones vendidos y los más vendidos.
           </p>
           <ul class="plan-features">
             <li>40 cupones mensuales</li>
@@ -89,14 +90,14 @@ function goToCheckout(planId) {
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   display: block;
   margin-top: 10px;
   border-radius: 2px;
 }
 
 .plan-card {
-  background-color: #325bcd;
+  background-color: #ecdd06;
   color: #f2f2f2;
   padding: 40px;
   align-items: center;
@@ -112,7 +113,7 @@ function goToCheckout(planId) {
 }
 
 .plan-card.premium {
-  background: linear-gradient(145deg, #223e91, #325bcd);
+  background: linear-gradient(145deg, #223e91, #ecdd06);
 }
 
 .plan-card h2 {

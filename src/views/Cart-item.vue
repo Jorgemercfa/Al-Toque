@@ -45,26 +45,46 @@ function claimCoupons() {
                 <p class="item-price">Gratis</p>
               </div>
               <div class="cart-controls">
-                <button class="qty-btn" @click="updateQuantity(item.id, item.quantity - 1)">−</button>
+                <button
+                  class="qty-btn"
+                  @click="updateQuantity(item.id, item.quantity - 1)"
+                >
+                  −
+                </button>
                 <span class="qty-value">{{ item.quantity }}</span>
-                <button class="qty-btn" @click="updateQuantity(item.id, item.quantity + 1)">+</button>
+                <button
+                  class="qty-btn"
+                  @click="updateQuantity(item.id, item.quantity + 1)"
+                >
+                  +
+                </button>
               </div>
               <p class="item-subtotal">Gratis</p>
-              <button class="remove-btn" @click="removeFromCart(item.id)" title="Eliminar">✕</button>
+              <button
+                class="remove-btn"
+                @click="removeFromCart(item.id)"
+                title="Eliminar"
+              >
+                ✕
+              </button>
             </div>
           </div>
 
           <div class="cart-summary">
             <h2 class="summary-title">Resumen</h2>
             <div class="summary-row">
-              <span>{{ cartCount }} cupón{{ cartCount !== 1 ? 'es' : '' }}</span>
+              <span
+                >{{ cartCount }} cupón{{ cartCount !== 1 ? 'es' : '' }}</span
+              >
               <span>Gratis</span>
             </div>
             <div class="summary-total">
               <span>Total</span>
               <span>Gratis</span>
             </div>
-            <button class="checkout-btn" @click="claimCoupons">Obtener cupones gratis</button>
+            <button class="checkout-btn" @click="claimCoupons">
+              Obtener cupones gratis
+            </button>
           </div>
         </div>
 
@@ -115,7 +135,7 @@ function claimCoupons() {
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   display: block;
   margin-top: 10px;
   border-radius: 2px;
@@ -182,10 +202,10 @@ function claimCoupons() {
 .qty-btn {
   width: 30px;
   height: 30px;
-  border: 2px solid #325bcd;
+  border: 2px solid #ecdd06;
   border-radius: 6px;
   background: white;
-  color: #325bcd;
+  color: #ecdd06;
   font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
@@ -194,7 +214,7 @@ function claimCoupons() {
 }
 
 .qty-btn:hover {
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
 }
 
@@ -206,7 +226,7 @@ function claimCoupons() {
 
 .item-subtotal {
   font-weight: 700;
-  color: #325bcd;
+  color: #ecdd06;
   min-width: 70px;
   text-align: right;
   margin: 0;
@@ -264,7 +284,7 @@ function claimCoupons() {
 .checkout-btn {
   width: 100%;
   padding: 14px;
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
   border: none;
   border-radius: 10px;
@@ -275,7 +295,7 @@ function claimCoupons() {
 }
 
 .checkout-btn:hover {
-  background: #2549ad;
+  background: #ecdd06;
   transform: translateY(-1px);
 }
 
@@ -302,13 +322,13 @@ function claimCoupons() {
   padding: 12px 24px;
   border: none;
   border-radius: 10px;
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
   font-weight: 600;
   cursor: pointer;
 }
 
 .browse-btn:hover {
-  background: #2549ad;
+  background: #ecdd06;
 }
 </style>

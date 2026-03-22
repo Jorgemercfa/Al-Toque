@@ -5,8 +5,14 @@ import { useRouter } from 'vue-router';
 import NavbarCompanies from '@/components/Navbar-company-item.vue';
 import Footer from '@/components/Footer-item.vue';
 import { useSessionCompany } from '@/auth/session_companies';
-import { addCompanyCoupon, getCouponsCreatedThisMonth } from '@/auth/companyCouponsRepo';
-import { getCompanyPlan, getMonthlyCouponLimitForPlan } from '@/auth/companyPlansRepo';
+import {
+  addCompanyCoupon,
+  getCouponsCreatedThisMonth,
+} from '@/auth/companyCouponsRepo';
+import {
+  getCompanyPlan,
+  getMonthlyCouponLimitForPlan,
+} from '@/auth/companyPlansRepo';
 
 const router = useRouter();
 const { state } = useSessionCompany();
@@ -35,9 +41,15 @@ const categories = [
 ];
 
 const companyPlan = computed(() => getCompanyPlan(state.company));
-const monthlyLimit = computed(() => getMonthlyCouponLimitForPlan(companyPlan.value));
-const monthlyCreated = computed(() => getCouponsCreatedThisMonth(state.company).length);
-const monthlyRemaining = computed(() => Math.max(0, monthlyLimit.value - monthlyCreated.value));
+const monthlyLimit = computed(() =>
+  getMonthlyCouponLimitForPlan(companyPlan.value),
+);
+const monthlyCreated = computed(
+  () => getCouponsCreatedThisMonth(state.company).length,
+);
+const monthlyRemaining = computed(() =>
+  Math.max(0, monthlyLimit.value - monthlyCreated.value),
+);
 
 const generateCouponCode = () => {
   const prefix = name.value
@@ -144,19 +156,31 @@ const onCreateCoupon = () => {
         <h1 class="main-title">Crear Cupones</h1>
 
         <div class="plan-alert">
-          <strong>Plan {{ companyPlan === 'premium' ? 'Premium' : 'Básico' }}:</strong>
+          <strong
+            >Plan
+            {{ companyPlan === 'premium' ? 'Premium' : 'Básico' }}:</strong
+          >
           {{ monthlyCreated }} / {{ monthlyLimit }} cupones creados este mes.
           <span class="remaining">Disponibles: {{ monthlyRemaining }}</span>
         </div>
 
         <div class="contact-card">
-          <form class="form-area" @submit.prevent="onCreateCoupon" autocomplete="on">
+          <form
+            class="form-area"
+            @submit.prevent="onCreateCoupon"
+            autocomplete="on"
+          >
             <div v-if="error" class="message error">{{ error }}</div>
             <div v-if="success" class="message success">{{ success }}</div>
 
             <div class="form-group">
               <label>Nombre del cupón</label>
-              <input v-model="name" type="text" required placeholder="Ej: Combo parrillero" />
+              <input
+                v-model="name"
+                type="text"
+                required
+                placeholder="Ej: Combo parrillero"
+              />
             </div>
 
             <div class="form-group">
@@ -172,13 +196,24 @@ const onCreateCoupon = () => {
             <div class="form-group">
               <label>Categoría</label>
               <select v-model="category">
-                <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
+                <option
+                  v-for="option in categories"
+                  :key="option"
+                  :value="option"
+                >
+                  {{ option }}
+                </option>
               </select>
             </div>
 
             <div class="form-group">
               <label>Porcentaje / Beneficio</label>
-              <input v-model="percentage" type="text" placeholder="Ej: 20% o 2x1" required />
+              <input
+                v-model="percentage"
+                type="text"
+                placeholder="Ej: 20% o 2x1"
+                required
+              />
             </div>
 
             <div class="form-group">
@@ -187,7 +222,10 @@ const onCreateCoupon = () => {
             </div>
 
             <div class="form-group">
-              <label>Cantidad de cupones para esta oferta (mínimo 50, máximo 500)</label>
+              <label
+                >Cantidad de cupones para esta oferta (mínimo 50, máximo
+                500)</label
+              >
               <div class="quantity-row">
                 <input
                   v-model.number="totalCoupons"
@@ -222,9 +260,17 @@ const onCreateCoupon = () => {
             <div class="code-row">
               <div class="form-group code-input">
                 <label>Código del cupón</label>
-                <input v-model="couponCode" type="text" placeholder="Se puede autogenerar" />
+                <input
+                  v-model="couponCode"
+                  type="text"
+                  placeholder="Se puede autogenerar"
+                />
               </div>
-              <button type="button" class="secondary-btn" @click="generateCouponCode">
+              <button
+                type="button"
+                class="secondary-btn"
+                @click="generateCouponCode"
+              >
                 Generar código
               </button>
             </div>
@@ -271,7 +317,7 @@ const onCreateCoupon = () => {
   content: '';
   width: 80px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   display: block;
   margin-top: 10px;
   border-radius: 2px;
@@ -279,7 +325,7 @@ const onCreateCoupon = () => {
 
 .plan-alert {
   background: #e8ecff;
-  border-left: 5px solid #325bcd;
+  border-left: 5px solid #ecdd06;
   padding: 12px 14px;
   border-radius: 10px;
   margin-bottom: 22px;
@@ -334,7 +380,7 @@ const onCreateCoupon = () => {
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #325bcd;
+  border-color: #ecdd06;
 }
 
 .quantity-row {
@@ -373,17 +419,17 @@ const onCreateCoupon = () => {
 }
 
 .submit-btn {
-  background-color: #325bcd;
+  background-color: #ecdd06;
   color: white;
 }
 
 .submit-btn:hover {
-  background-color: #2549ad;
+  background-color: #ecdd06;
 }
 
 .secondary-btn {
   background-color: #e8ecff;
-  color: #325bcd;
+  color: #ecdd06;
 }
 
 .secondary-btn:hover {

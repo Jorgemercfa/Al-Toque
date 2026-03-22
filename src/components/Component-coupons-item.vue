@@ -194,7 +194,7 @@ watch(
   content: '';
   width: 70px;
   height: 4px;
-  background-color: #325bcd;
+  background-color: #ecdd06;
   position: absolute;
   bottom: -15px;
   left: 50%;
@@ -275,7 +275,7 @@ watch(
 
 /* código del cupón */
 .coupon-code {
-  background: #325bcd;
+  background: #ecdd06;
   color: white;
   padding: 14px;
   border-radius: 8px;
@@ -302,7 +302,7 @@ watch(
 }
 
 .card-button {
-  background-color: #325bcd;
+  background-color: #ecdd06;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -323,7 +323,7 @@ watch(
 }
 
 .card-button:hover {
-  background-color: #325bcd;
+  background-color: #ecdd06;
 }
 
 .not-found {
