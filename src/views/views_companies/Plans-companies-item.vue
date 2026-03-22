@@ -23,29 +23,35 @@ function goToCheckout(planId) {
 
   <section class="plan-section">
     <div class="plan-container">
-      <h1 class="main-title">Planes</h1>
+      <h1 class="main-title">Planes para empresas</h1>
       <div class="plan-layout">
         <div class="plan-card">
-          <h2>Basico</h2>
+          <h2>Básico</h2>
           <p class="plan-text">
-            Permite a las empresas publicar ofertas y promociones en la
-            plataforma, llegando a una amplia audiencia de usuarios interesados
-            en descuentos y promociones. Es ideal para pequeñas empresas que
-            desean aumentar su visibilidad y atraer nuevos clientes.
+            Incluye publicación de hasta <strong>20 cupones por mes</strong>, sesión de
+            cupones activos, canjeo de códigos y soporte para empresas.
           </p>
+          <ul class="plan-features">
+            <li>20 cupones mensuales</li>
+            <li>Gestión de códigos únicos adquiridos</li>
+            <li>Deadline por código y limpieza automática</li>
+          </ul>
           <button class="checkout-btn" @click="goToCheckout('basic')">
             Proceder al pago
           </button>
         </div>
-        <div class="plan-card">
+        <div class="plan-card premium">
           <h2>Premium</h2>
           <p class="plan-text">
-            Ofrece todas las características del plan básico, además de acceso a
-            análisis avanzados sobre el rendimiento de las promociones, soporte
-            prioritario y la capacidad de destacar las ofertas en la plataforma.
-            Es perfecto para empresas que buscan maximizar su alcance y obtener
-            información detallada sobre el comportamiento de los usuarios.
+            Todo lo del básico y capacidad de publicar hasta
+            <strong>40 cupones por mes</strong>, además de dashboard con estadísticas
+            de cupones vendidos y los más vendidos.
           </p>
+          <ul class="plan-features">
+            <li>40 cupones mensuales</li>
+            <li>Dashboard de rendimiento</li>
+            <li>Soporte prioritario para empresas</li>
+          </ul>
           <button class="checkout-btn" @click="goToCheckout('premium')">
             Proceder al pago
           </button>
@@ -67,8 +73,9 @@ function goToCheckout(planId) {
 
 .plan-layout {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 40px;
+  flex-wrap: wrap;
 }
 
 .main-title {
@@ -91,27 +98,40 @@ function goToCheckout(planId) {
 .plan-card {
   background-color: #325bcd;
   color: #f2f2f2;
-  padding: 50px;
+  padding: 40px;
   align-items: center;
   border-radius: 20px;
-  text-align: center;
+  text-align: left;
   width: 400px;
-  height: 500px;
-  margin-top: 40px;
+  min-height: 500px;
+  margin-top: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-card.premium {
+  background: linear-gradient(145deg, #223e91, #325bcd);
 }
 
 .plan-card h2 {
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 10px;
-  font-size: 22px;
+  font-size: 28px;
   color: #ffffff;
+  align-self: flex-start;
 }
 
 .plan-card p {
   font-size: 16px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+}
+
+.plan-features {
+  margin: 10px 0 22px;
+  padding-left: 18px;
+  width: 100%;
 }
 
 .checkout-btn {
@@ -125,10 +145,11 @@ function goToCheckout(planId) {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.25s, transform 0.2s;
+  margin-top: auto;
 }
 
 .checkout-btn:hover {
-  background: #1f1f1f;
+  background: #101010;
   transform: translateY(-2px);
 }
 </style>

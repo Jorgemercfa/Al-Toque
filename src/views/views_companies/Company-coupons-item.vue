@@ -1,14 +1,36 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 import NavbarCompanies from '@/components/Navbar-company-item.vue';
 import Footer from '@/components/Footer-item.vue';
 import { useSessionCompany } from '@/auth/session_companies';
-import { getCouponsByCompany } from '@/auth/companyCouponsRepo';
+import {
+  getCouponsByCompany,
+  getCompanyCouponsStats,
+  isCouponActive,
+  redeemCompanyCouponCode,
+} from '@/auth/companyCouponsRepo';
 
 const { state } = useSessionCompany();
 
+const redeemCode = ref('');
+const redeemMessage = ref('');
+const redeemType = ref('success');
+
 const coupons = computed(() => getCouponsByCompany(state.company));
+const activeCoupons = computed(() => coupons.value.filter((coupon) => isCouponActive(coupon)));
+const stats = computed(() => getCompanyCouponsStats(state.company));
+
+const uniqueCodes = computed(() =>
+  stats.value.coupons
+    .flatMap((coupon) =>
+      (coupon.acquiredCodes || []).map((code) => ({
+        ...code,
+        couponName: coupon.name,
+      })),
+    )
+    .slice(0, 40),
+);
 
 const formatDate = (isoOrDate) => {
   if (!isoOrDate) return '-';
@@ -17,6 +39,13 @@ const formatDate = (isoOrDate) => {
   if (Number.isNaN(date.getTime())) return isoOrDate;
 
   return date.toLocaleDateString('es-PE');
+};
+
+const submitRedeem = () => {
+  const result = redeemCompanyCouponCode(state.company, redeemCode.value);
+  redeemType.value = result.ok ? 'success' : 'error';
+  redeemMessage.value = result.message;
+  if (result.ok) redeemCode.value = '';
 };
 </script>
 
@@ -28,43 +57,96 @@ const formatDate = (isoOrDate) => {
 
     <main class="dashboard-section">
       <div class="dashboard-container">
-        <h1 class="page-title">Cupones creados por empresa</h1>
+        <h1 class="page-title">Panel de cupones para empresas</h1>
 
-        <div v-if="coupons.length === 0" class="empty-state">
-          <p>Aún no has creado cupones.</p>
-          <router-link to="/Create-Coupons" class="create-link">
-            Crear mi primer cupón
-          </router-link>
-        </div>
+        <section class="dashboard-block">
+          <h2>Sesión de cupones activos</h2>
 
-        <div v-else class="coupons-grid">
-          <article v-for="coupon in coupons" :key="coupon.id" class="coupon-card">
-            <div class="badge">{{ coupon.percentage || 'Oferta' }}</div>
-            <h3>{{ coupon.name }}</h3>
-            <p class="short">{{ coupon.shortDescription }}</p>
+          <div v-if="activeCoupons.length === 0" class="empty-state">
+            <p>No tienes cupones activos en este momento.</p>
+            <router-link to="/Create-Coupons" class="create-link">
+              Crear un cupón
+            </router-link>
+          </div>
 
-            <div class="meta-row">
-              <strong>Código:</strong>
-              <span>{{ coupon.coupon_code }}</span>
+          <div v-else class="coupons-grid">
+            <article v-for="coupon in activeCoupons" :key="coupon.id" class="coupon-card">
+              <div class="badge">{{ coupon.percentage || 'Oferta' }}</div>
+              <h3>{{ coupon.name }}</h3>
+              <p class="short">{{ coupon.shortDescription }}</p>
+
+              <div class="meta-row">
+                <strong>Código base:</strong>
+                <span>{{ coupon.coupon_code }}</span>
+              </div>
+              <div class="meta-row">
+                <strong>Categoría:</strong>
+                <span>{{ coupon.category }}</span>
+              </div>
+              <div class="meta-row">
+                <strong>Stock inicial:</strong>
+                <span>{{ coupon.totalCoupons }}</span>
+              </div>
+              <div class="meta-row">
+                <strong>Vence:</strong>
+                <span>{{ formatDate(coupon.expiration_date) }}</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="dashboard-block">
+          <h2>Estadísticas</h2>
+          <div class="stats-grid">
+            <article class="stat-card">
+              <p>Cupones vendidos/canjeados</p>
+              <strong>{{ stats.soldTotal }}</strong>
+            </article>
+            <article class="stat-card">
+              <p>Códigos activos</p>
+              <strong>{{ stats.activeTotal }}</strong>
+            </article>
+            <article class="stat-card">
+              <p>Cupón más vendido</p>
+              <strong>{{ stats.bestSeller?.name || 'Sin ventas aún' }}</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="dashboard-block">
+          <h2>Canjeo de códigos</h2>
+          <div class="redeem-box">
+            <input v-model="redeemCode" type="text" placeholder="Ingresa el código único" />
+            <button @click="submitRedeem">Canjear código</button>
+          </div>
+          <p v-if="redeemMessage" :class="['redeem-message', redeemType]">{{ redeemMessage }}</p>
+        </section>
+
+        <section class="dashboard-block">
+          <h2>Códigos únicos adquiridos</h2>
+          <div class="codes-table">
+            <div class="codes-header">
+              <span>Código</span>
+              <span>Cupón</span>
+              <span>Estado</span>
+              <span>Deadline</span>
             </div>
-            <div class="meta-row">
-              <strong>Categoría:</strong>
-              <span>{{ coupon.category }}</span>
+            <div v-for="code in uniqueCodes" :key="code.id" class="codes-row">
+              <span>{{ code.uniqueCode }}</span>
+              <span>{{ code.couponName }}</span>
+              <span>{{ code.status }}</span>
+              <span>{{ formatDate(code.deadline) }}</span>
             </div>
-            <div class="meta-row">
-              <strong>Precio:</strong>
-              <span>S/ {{ coupon.original_price }}</span>
-            </div>
-            <div class="meta-row">
-              <strong>Vence:</strong>
-              <span>{{ formatDate(coupon.expiration_date) }}</span>
-            </div>
-            <div class="meta-row">
-              <strong>Creado:</strong>
-              <span>{{ formatDate(coupon.createdAt) }}</span>
-            </div>
-          </article>
-        </div>
+          </div>
+        </section>
+
+        <section class="dashboard-block support-block">
+          <h2>Soporte para empresas</h2>
+          <p>
+            Si necesitas apoyo con campañas, canjes o gestión de cupones,
+            escríbenos a <strong>soporte-empresas@altoque.app</strong>.
+          </p>
+        </section>
       </div>
     </main>
 
@@ -98,11 +180,17 @@ const formatDate = (isoOrDate) => {
   margin-bottom: 26px;
 }
 
-.empty-state {
+.dashboard-block {
   background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.07);
+  margin-bottom: 18px;
+}
+
+.empty-state {
   border-radius: 16px;
-  padding: 28px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+  padding: 12px 0;
 }
 
 .create-link {
@@ -123,7 +211,7 @@ const formatDate = (isoOrDate) => {
   background: #fff;
   border-radius: 14px;
   padding: 18px;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.07);
+  box-shadow: inset 0 0 0 1px #ececec;
 }
 
 .badge {
@@ -148,5 +236,93 @@ const formatDate = (isoOrDate) => {
   justify-content: space-between;
   gap: 8px;
   margin-top: 5px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.stat-card {
+  background: #eef2ff;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.stat-card strong {
+  font-size: 1.4rem;
+}
+
+.redeem-box {
+  display: flex;
+  gap: 10px;
+}
+
+.redeem-box input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.redeem-box button {
+  border: none;
+  border-radius: 10px;
+  padding: 0 16px;
+  background: #325bcd;
+  color: #fff;
+}
+
+.redeem-message {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.redeem-message.success {
+  color: #177245;
+}
+
+.redeem-message.error {
+  color: #b00020;
+}
+
+.codes-table {
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.codes-header,
+.codes-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr;
+  gap: 12px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+
+.codes-header {
+  background: #f8f8ff;
+  font-weight: 700;
+}
+
+.codes-row:nth-child(even) {
+  background: #fcfcff;
+}
+
+.support-block strong {
+  color: #325bcd;
+}
+
+@media (max-width: 700px) {
+  .redeem-box {
+    flex-direction: column;
+  }
+
+  .codes-header,
+  .codes-row {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
