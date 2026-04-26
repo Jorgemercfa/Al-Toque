@@ -9,6 +9,7 @@ import {
   getCompanyCouponsStats,
   isCouponActive,
   redeemCompanyCouponCode,
+  isCodeExpired,
 } from '@/auth/companyCouponsRepo';
 
 const { state } = useSessionCompany();
@@ -48,6 +49,20 @@ const submitRedeem = () => {
   redeemType.value = result.ok ? 'success' : 'error';
   redeemMessage.value = result.message;
   if (result.ok) redeemCode.value = '';
+};
+
+const countAvailable = (coupon) => {
+  if (!Array.isArray(coupon.acquiredCodes)) return 0;
+  return coupon.acquiredCodes.filter(
+    (code) => code.status === 'activo' && !isCodeExpired(code),
+  ).length;
+};
+
+const countAcquired = (coupon) => {
+  if (!Array.isArray(coupon.acquiredCodes)) return 0;
+  return coupon.acquiredCodes.filter(
+    (code) => code.status === 'adquirido' || code.status === 'canjeado',
+  ).length;
 };
 </script>
 
@@ -96,6 +111,14 @@ const submitRedeem = () => {
               <div class="meta-row">
                 <strong>Vence:</strong>
                 <span>{{ formatDate(coupon.expiration_date) }}</span>
+              </div>
+              <div class="meta-row">
+                <strong>Cupones disponibles:</strong>
+                <span>{{ countAvailable(coupon) }}</span>
+              </div>
+              <div class="meta-row">
+                <strong>Cupones adquiridos:</strong>
+                <span>{{ countAcquired(coupon) }}</span>
               </div>
             </article>
           </div>

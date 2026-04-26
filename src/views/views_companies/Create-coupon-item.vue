@@ -226,6 +226,7 @@ const onCreateCoupon = () => {
                 >Cantidad de cupones para esta oferta (mínimo 50, máximo
                 500)</label
               >
+              <div class="quantity-badge">{{ totalCoupons }} cupones</div>
               <div class="quantity-row">
                 <input
                   v-model.number="totalCoupons"
@@ -243,8 +244,10 @@ const onCreateCoupon = () => {
                   step="1"
                   class="quantity-input"
                   @blur="normalizeCouponQuantity"
+                  @change="normalizeCouponQuantity"
                 />
               </div>
+              <p class="quantity-hint">Mínimo: 50 | Máximo: 500. Puedes mover el deslizador o escribir el número directamente.</p>
             </div>
 
             <div class="form-group">
@@ -387,6 +390,24 @@ const onCreateCoupon = () => {
   display: flex;
   gap: 10px;
   align-items: center;
+}
+
+.quantity-badge {
+  display: inline-block;
+  background: #ecdd06;
+  color: #1f1f1f;
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.quantity-hint {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 6px;
 }
 
 .quantity-row input[type='range'] {
