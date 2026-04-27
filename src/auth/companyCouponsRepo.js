@@ -76,7 +76,7 @@ function sanitizeCoupon(coupon) {
   };
 }
 
-function isCodeExpired(code) {
+export function isCodeExpired(code) {
   if (!code?.deadline) return false;
   const deadline = new Date(code.deadline);
   if (Number.isNaN(deadline.getTime())) return false;
@@ -265,6 +265,30 @@ export function getCompanyCouponsStats(company) {
     bestSeller,
     coupons: withStats,
   };
+}
+
+export function acquireCodeForUser(couponId, userId) {
+  const coupons = getCompanyCoupons();
+  const coupon = coupons.find((c) => c.id === couponId);
+
+  if (!coupon || !Array.isArray(coupon.acquiredCodes)) return null;
+
+  const codeIndex = coupon.acquiredCodes.findIndex(
+    (code) => code.status === 'activo' && !isCodeExpired(code),
+  );
+
+  if (codeIndex === -1) return null;
+
+  coupon.acquiredCodes[codeIndex] = {
+    ...coupon.acquiredCodes[codeIndex],
+    status: 'adquirido',
+    acquiredBy: userId,
+    acquiredAt: new Date().toISOString(),
+  };
+
+  saveCompanyCoupons(coupons);
+
+  return coupon.acquiredCodes[codeIndex];
 }
 
 export function isCouponActive(coupon) {

@@ -1,5 +1,5 @@
 import { reactive, computed } from 'vue';
-import { getCompanyCoupons } from '@/auth/companyCouponsRepo';
+import { getCompanyCoupons, acquireCodeForUser } from '@/auth/companyCouponsRepo';
 import { useSession } from '@/auth/session';
 
 const STORAGE_KEY = 'al-toque-cart';
@@ -92,19 +92,30 @@ export function useCart() {
     const userId = sessionState.user?.id ?? null;
     if (!userId) return;
 
-    const purchased = cartItems.value
-      .filter((item) =>
-        !state.purchasedCoupons.some(
-          (owned) => owned.userId === userId && owned.id === item.id,
-        ),
-      )
-      .map((item) => ({
+    const purchased = [];
+
+    for (const item of cartItems.value) {
+      const alreadyOwned = state.purchasedCoupons.some(
+        (owned) => owned.userId === userId && owned.id === item.id,
+      );
+      if (alreadyOwned) continue;
+
+      const assignedCode = acquireCodeForUser(item.id, userId);
+      if (!assignedCode) {
+        console.warn(`No hay códigos disponibles para el cupón "${item.name}" (id: ${item.id}). Se omite.`);
+        continue;
+      }
+
+      purchased.push({
         ...item,
         discount_price: 0,
         original_price: item.original_price ?? item.discount_price,
         purchasedAt: new Date().toISOString(),
         userId,
-      }));
+        uniqueCode: assignedCode.uniqueCode,
+        deadline: assignedCode.deadline,
+      });
+    }
 
     if (purchased.length > 0) {
       state.purchasedCoupons.push(...purchased);
@@ -121,7 +132,22 @@ export function useCart() {
   }
 
   function getPurchasedCoupons(userId) {
-    return state.purchasedCoupons.filter((c) => c.userId === userId);
+    const now = Date.now();
+    const before = state.purchasedCoupons.length;
+    const valid = state.purchasedCoupons.filter((c) => {
+      if (c.userId !== userId) return true;
+      if (!c.deadline) return true;
+      const deadline = new Date(c.deadline);
+      if (Number.isNaN(deadline.getTime())) return true;
+      return deadline.getTime() >= now;
+    });
+
+    if (valid.length !== before) {
+      state.purchasedCoupons.splice(0, state.purchasedCoupons.length, ...valid);
+      persist();
+    }
+
+    return valid.filter((c) => c.userId === userId);
   }
 
   return {

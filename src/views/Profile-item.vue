@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '@/components/Navbar-item.vue';
 import Footer from '@/components/Footer-item.vue';
@@ -23,10 +23,22 @@ function formatDate(iso) {
   });
 }
 
+function isNearExpiry(deadline) {
+  if (!deadline) return false;
+  const ms = new Date(deadline).getTime() - Date.now();
+  return ms > 0 && ms < 7 * 24 * 60 * 60 * 1000;
+}
+
 const onLogout = () => {
   logout();
   router.push({ name: 'Home' });
 };
+
+onMounted(() => {
+  if (state.user) {
+    getPurchasedCoupons(state.user.id);
+  }
+});
 </script>
 
 <template>
@@ -69,7 +81,12 @@ const onLogout = () => {
               <img :src="c.image" :alt="c.name" class="coupon-img" />
               <div class="coupon-body">
                 <h3 class="coupon-name">{{ c.name }}</h3>
-                <div class="coupon-code-box">{{ c.coupon_code }}</div>
+                <div class="coupon-code-box unique-code" title="Código único – haz clic para seleccionar">
+                  {{ c.uniqueCode || c.coupon_code }}
+                </div>
+                <p class="coupon-deadline" :class="{ 'near-expiry': isNearExpiry(c.deadline) }">
+                  Válido hasta: {{ c.deadline ? formatDate(c.deadline) : 'Sin vencimiento' }}
+                </p>
                 <p class="coupon-date">
                   Comprado el {{ formatDate(c.purchasedAt) }}
                 </p>
@@ -241,6 +258,25 @@ const onLogout = () => {
   margin-bottom: 10px;
   cursor: default;
   user-select: all;
+}
+
+.unique-code {
+  background: #1f1f1f;
+  color: #ecdd06;
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+
+.coupon-deadline {
+  font-size: 0.82rem;
+  color: #555;
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+
+.coupon-deadline.near-expiry {
+  color: #e65c00;
+  font-weight: 700;
 }
 
 .coupon-date {
